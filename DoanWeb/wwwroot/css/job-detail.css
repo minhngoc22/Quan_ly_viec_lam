@@ -1,0 +1,16 @@
+﻿#section-comments .border {
+    border-color: #e0e0e0 !important;
+}
+
+#section-comments .bg-light {
+    background-color: #fafafa !important;
+}
+
+#section-comments textarea {
+    resize: none;
+    font-size: 0.9rem;
+}
+
+#section-comments .fa-user-circle {
+    min-width: 20px;
+}

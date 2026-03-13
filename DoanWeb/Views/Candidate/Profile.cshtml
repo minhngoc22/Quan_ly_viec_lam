@@ -1,0 +1,145 @@
+﻿@model DoanWeb.Models.CandidateProfileViewModel
+<link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+@{
+    ViewData["Title"] = "Hồ sơ ứng viên";
+}
+
+<div class="profile-container">
+    <h2 class="text-center text-primary fw-bold mb-4">
+        <i class="bi bi-person-lines-fill"></i> @ViewData["Title"]
+    </h2>
+
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success text-center mb-4" id="successMessage">
+            <i class="bi bi-check-circle-fill me-2"></i> @ViewBag.SuccessMessage
+        </div>
+    }
+
+    <div class="row g-4">
+        <!-- 🧍 Hồ sơ ứng viên -->
+        <div class="col-lg-6">
+            <div class="card card-custom h-100">
+                <div class="card-header-custom">
+                    <i class="bi bi-person-badge me-2"></i> Hồ sơ cá nhân
+                </div>
+
+                <div class="card-body">
+                    <!-- 🔹 Form cập nhật profile + avatar -->
+                    <form asp-action="Profile" method="post" enctype="multipart/form-data">
+                        <!-- 🔹 Avatar hiển thị + upload -->
+                        <div class="col-12 text-center mb-3">
+                            <div class="position-relative d-inline-block">
+                                <!-- Avatar -->
+                                <img id="avatarPreview"
+                                     src="@(!string.IsNullOrEmpty(Model.Avatar) ? Model.Avatar : "/images/avatar/default.jpg")"
+                                     alt="@Model.FullName"
+                                     class="rounded-circle border"
+                                     style="width:100px; height:100px; object-fit:cover; display:block; margin:auto;" />
+
+                                <!-- Icon cây bút -->
+                                <label for="AvatarFile" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-1" style="cursor:pointer;">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </label>
+
+                                <!-- Input file ẩn -->
+                                <input type="file" asp-for="AvatarFile" id="AvatarFile" accept="image/*" style="display:none;" />
+                            </div>
+                            <div class="mt-2 fw-bold">@Model.FullName</div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">Họ và tên</label>
+                                    <input type="text" class="form-control" id="fullName" asp-for="FullName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" asp-for="Email" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="phone" asp-for="Phone">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dob" class="form-label">Ngày sinh</label>
+                                    <input type="date" class="form-control" id="dob" asp-for="DateOfBirth">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Giới tính</label>
+                                    <select class="form-select" id="gender" asp-for="Gender">
+                                        <option value="">-- Chọn giới tính --</option>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Địa chỉ</label>
+                                    <input type="text" class="form-control" id="address" asp-for="Address">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-gradient w-100 py-2 mt-2">
+                            <i class="bi bi-save me-1"></i> Cập nhật hồ sơ
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔑 Đổi mật khẩu -->
+        <div class="col-lg-6">
+            <div class="card card-custom h-100">
+                <div class="card-header-dark">
+                    <i class="bi bi-key-fill me-2"></i> Cập nhật mật khẩu
+                </div>
+                <div class="card-body">
+                    <form asp-action="ChangePassword" method="post">
+                        <div class="mb-3">
+                            <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="oldPassword" name="OldPassword" placeholder="Nhập mật khẩu cũ">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="newPassword" name="NewPassword" placeholder="Nhập mật khẩu mới">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" placeholder="Nhập lại mật khẩu mới">
+                        </div>
+
+                        <button type="submit" class="btn btn-dark-custom w-100 py-2">
+                            <i class="bi bi-shield-lock-fill me-1"></i> Đổi mật khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        const avatarInput = document.getElementById('AvatarFile');
+        const avatarPreview = document.getElementById('avatarPreview');
+
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

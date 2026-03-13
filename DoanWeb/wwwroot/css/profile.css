@@ -1,0 +1,127 @@
+﻿/* 🌿 Tổng thể */
+body {
+    background: #fdfcff;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+/* 📦 Container chính */
+.profile-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px;
+}
+
+/* 💎 Card sáng nhẹ, viền bóng */
+.card-custom {
+    border: none;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.15);
+    transition: all 0.3s ease;
+}
+
+    .card-custom:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 25px rgba(40, 167, 69, 0.25);
+    }
+
+/* 💙 Header chính (Hồ sơ cá nhân) — xanh ngọc đậm */
+.card-header-custom {
+    background: #009688;
+    color: #fff;
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+    padding: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* 💙 Nút lưu hồ sơ */
+.btn-gradient {
+    background: #009688;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+    .btn-gradient:hover {
+        background: #00796b;
+        transform: translateY(-2px);
+    }
+
+/* 🌿 Tiêu đề trang */
+h2.text-primary {
+    color: #009688 !important;
+    font-weight: 700;
+}
+
+/* 🧡 Header phụ (Cập nhật mật khẩu) */
+.card-header-dark {
+    background: #ff9800;
+    color: #fff;
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+    padding: 15px;
+    font-weight: 600;
+}
+
+/* 🏷️ Label & Input */
+.form-label {
+    font-weight: 500;
+    color: #444;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9fff9;
+    transition: 0.2s;
+}
+
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 6px rgba(40, 167, 69, 0.5);
+    }
+
+
+/* 🧡 Nút đổi mật khẩu */
+.btn-dark-custom {
+    background: #ff9800;
+    border: none;
+    font-weight: 600;
+    color: #fff;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+    .btn-dark-custom:hover {
+        background: #e68900;
+        transform: translateY(-2px);
+    }
+
+/* 🍑 Alert nhẹ nhàng */
+.alert {
+    border-radius: 10px;
+    background: #fff3cd;
+    color: #856404;
+    border: none;
+    font-weight: 500;
+}
+
+
+/* Hiệu ứng hover icon cây bút */
+label[for="AvatarFile"] {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+    label[for="AvatarFile"]:hover {
+        background-color: #0d6efd; /* màu xanh đậm hơn khi hover */
+    }

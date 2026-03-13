@@ -1,0 +1,133 @@
+﻿@model IEnumerable<DoanWeb.Models.User>
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<div class="container mt-5">
+    <h2 class="text-primary fw-bold mb-4">👤 Quản lý người dùng</h2>
+
+    <div class="mb-3 text-end">
+        <a asp-action="AddAdmin" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Thêm người dùng
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle shadow-sm">
+        <thead class="table-primary">
+            <tr class="text-center">
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td class="text-center">@user.UserId</td>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Role</td>
+                    <td class="text-center">
+                        @if (user.Status == true)
+                        {
+                            <span class="badge bg-success">Hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Đã khóa</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (user.Status == true)
+                        {
+                            <a asp-action="LockUser" asp-route-id="@user.UserId"
+                               class="btn btn-sm btn-warning">
+                                <i class="fas fa-lock"></i> Khóa
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="UnlockUser" asp-route-id="@user.UserId"
+                               class="btn btn-sm btn-success">
+                                <i class="fas fa-unlock"></i> Mở
+                            </a>
+                        }
+                        <button class="btn btn-sm btn-info btnSetPassword"
+                                data-id="@user.UserId"
+                                data-name="@user.FullName">
+                            <i class="fas fa-key"></i> Đặt lại MK
+                        </button>
+
+                        <a asp-action="DeleteUser" asp-route-id="@user.UserId"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?');">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </a>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- ✅ Nút quay lại Dashboard -->
+<a asp-action="Dashboard" asp-controller="Admin" class="btn btn-secondary mb-3">
+    ← Quay lại Dashboard
+</a>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // 🟢 Đặt lại mật khẩu bằng SweetAlert2
+            document.querySelectorAll(".btnSetPassword").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const id = btn.dataset.id;
+                    const name = btn.dataset.name;
+
+                    const { value: password } = await Swal.fire({
+                        title: `Đặt mật khẩu mới cho <b>${name}</b>`,
+                        input: "password",
+                        inputPlaceholder: "Nhập mật khẩu mới...",
+                        confirmButtonText: "Lưu",
+                        showCancelButton: true,
+                        cancelButtonText: "Hủy",
+                        confirmButtonColor: "#0d6efd",
+                        inputValidator: (value) => {
+                            if (!value) return "Vui lòng nhập mật khẩu!";
+                            if (value.length < 6) return "Mật khẩu phải ít nhất 6 ký tự!";
+                        }
+                    });
+
+                    if (password) {
+                        const response = await fetch('@Url.Action("SetUserPassword", "Admin")', {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: `id=${id}&password=${encodeURIComponent(password)}`
+                        });
+
+                        if (response.ok) {
+                            await Swal.fire({
+                                icon: "success",
+                                title: "✅ Thành công!",
+                                text: `Mật khẩu cho ${name} đã được cập nhật.`,
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            Swal.fire("❌ Lỗi", "Không thể cập nhật mật khẩu. Vui lòng thử lại.", "error");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

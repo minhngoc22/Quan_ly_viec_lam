@@ -1,0 +1,179 @@
+﻿@model List<DoanWeb.Models.CareerGuide>
+@{
+    ViewData["Title"] = "Quản lý Cẩm nang";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4"><i class="bi bi-book-fill me-2"></i>Quản lý Cẩm nang</h2>
+
+    <!-- ✅ Nút thêm cẩm nang -->
+    <div class="mb-3">
+        <a asp-action="AddCareerGuide" class="btn btn-success">
+            <i class="bi bi-plus-lg"></i> Thêm Cẩm nang
+        </a>
+    </div>
+
+    <!-- ✅ Bảng cẩm nang -->
+    <div class="table-responsive">
+        <table id="careerGuideTable" class="table table-bordered table-hover align-middle">
+            <thead class="table-light text-center">
+                <tr>
+                    <th style="width: 60px;">Thứ tự</th>
+                    <th>Tiêu đề</th>
+                    <th>Mô tả</th>
+                    <th>Danh mục</th>
+                    <th>Tác giả</th>
+                    <th>Ngày đăng</th>
+                    <th>Views</th>
+                    <th>Trạng thái</th>
+                    <th style="min-width: 200px;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var guide in Model.OrderBy(g => g.DisplayOrder))
+                    {
+                        <tr data-id="@guide.GuideId">
+                            <td class="text-center fw-bold">@guide.DisplayOrder</td>
+                            <td>@guide.Title</td>
+                            <td>@guide.Description</td>
+                            <td>@guide.Category</td>
+                            <td>@guide.Author</td>
+                            <td>@guide.PostedDate?.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">@guide.Views</td>
+                            <td class="text-center">
+                                @if (guide.IsActive == true)
+                                {
+                                    <span class="badge bg-success">Hiển thị</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Ẩn</span>
+                                }
+
+                            </td>
+                            <td class="text-center" style="white-space: nowrap;">
+                                <!-- Sửa -->
+                                <a asp-action="EditCareerGuide" asp-route-id="@guide.GuideId" class="btn btn-sm btn-primary me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <!-- Xóa -->
+                                <form asp-action="DeleteCareerGuide" asp-route-id="@guide.GuideId" method="post" class="d-inline me-1"
+                                      onsubmit="return confirm('Bạn có chắc muốn xóa cẩm nang này?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+
+                                <!-- Ẩn/Hiện -->
+                                <form asp-action="ToggleCareerGuideVisibility" asp-route-id="@guide.GuideId" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm @(guide.IsActive == true ? "btn-secondary" : "btn-success")">
+                                        <i class="bi @(guide.IsActive == true ? "bi-eye-slash" : "bi-eye")"></i>
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">Chưa có cẩm nang nào.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ✅ Nút quay lại Dashboard -->
+<a asp-action="Dashboard" asp-controller="Admin" class="btn btn-secondary mt-3">
+    ← Quay lại Dashboard
+</a>
+
+<!-- ✅ CSS highlight khi kéo -->
+<style>
+    #careerGuideTable tbody tr {
+        cursor: move;
+    }
+
+    .ui-state-highlight {
+        background-color: #f0f8ff !important;
+        border: 2px dashed #007bff !important;
+        height: 45px;
+    }
+</style>
+
+@section Scripts {
+    <!-- jQuery & jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(function () {
+            // ✅ Kéo thả thay đổi vị trí
+            $("#careerGuideTable tbody").sortable({
+                placeholder: "ui-state-highlight",
+                update: function (event, ui) {
+                    var order = [];
+                    $("#careerGuideTable tbody tr").each(function (index) {
+                        order.push($(this).data("id"));
+                        $(this).find("td:first").text(index + 1); // Cập nhật số thứ tự hiển thị
+                    });
+
+                    $.ajax({
+                       url: '@Url.Action("UpdateOrder", "CareerGuide")',
+
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(order),
+                        success: function () {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đã cập nhật thứ tự!',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Cập nhật thất bại!',
+                                text: 'Vui lòng thử lại.',
+                            });
+                        }
+                    });
+                }
+            }).disableSelection();
+
+            // ✅ Hiển thị thông báo nếu có TempData
+            var successMessage = '@Html.Raw(TempData["SuccessMessage"])';
+            var errorMessage = '@Html.Raw(TempData["ErrorMessage"])';
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: successMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: errorMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+}

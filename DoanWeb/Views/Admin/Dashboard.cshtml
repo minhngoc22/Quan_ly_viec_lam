@@ -1,0 +1,150 @@
+﻿@model DoanWeb.Models.AdminDashboardViewModel
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+@{
+    ViewData["Title"] = "Bảng điều khiển Admin";
+}
+
+
+
+<div class="container-fluid mt-4">
+    <!-- Tiêu đề + breadcrumb -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">
+            <i class="bi bi-speedometer2 me-2"></i> Bảng điều khiển
+        </h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- ✅ Hàng Quản lý nhanh -->
+    <div class="d-flex justify-content-between flex-wrap mt-3 g-3">
+        <!-- Người dùng -->
+        <div class="flex-fill mx-2" style="max-width: 19%;">
+            <a asp-controller="Admin" asp-action="ManageUsers" class="text-decoration-none text-dark">
+                <div class="card text-center dashboard-card hover-users">
+                    <div class="card-body">
+                        <i class="bi bi-person-badge text-primary"></i>
+                        <h5 class="mt-2 fw-bold">Người dùng</h5>
+                        <p class="fs-5 fw-semibold">@Model.TotalUsers</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Việc làm -->
+        <div class="flex-fill mx-2" style="max-width: 19%;">
+            <a asp-controller="Admin" asp-action="JobManagement" class="text-decoration-none text-dark">
+                <div class="card text-center dashboard-card hover-jobs position-relative">
+                    <div class="card-body">
+                        <i class="bi bi-briefcase-fill text-success"></i>
+                        <h5 class="mt-2 fw-bold">Việc làm</h5>
+                        <p class="fs-5 fw-semibold">@Model.TotalJobs</p>
+                        @if (Model.TotalJobsPending > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @Model.TotalJobsPending
+                            </span>
+                        }
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Báo cáo -->
+        <div class="flex-fill mx-2" style="max-width: 19%;">
+            <a asp-controller="Admin" asp-action="ManageReports" class="text-decoration-none text-dark">
+                <div class="card text-center dashboard-card hover-reports position-relative">
+                    <div class="card-body">
+                        <i class="bi bi-flag-fill text-danger"></i>
+                        <h5 class="mt-2 fw-bold">Báo cáo</h5>
+                        <p class="fs-5 fw-semibold">@Model.TotalReports</p>
+                        @if (Model.TotalReportsPending > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                                @Model.TotalReportsPending
+                            </span>
+                        }
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Ngành nghề -->
+        <div class="flex-fill mx-2" style="max-width: 19%;">
+            <a asp-controller="Admin" asp-action="ManageCategories" class="text-decoration-none text-dark">
+                <div class="card text-center dashboard-card hover-categories">
+                    <div class="card-body">
+                        <i class="bi bi-tags-fill text-warning"></i>
+                        <h5 class="mt-2 fw-bold">Ngành nghề</h5>
+                        <p class="fs-5 fw-semibold">@Model.TotalEmployers</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Cẩm nang -->
+        <div class="flex-fill mx-2" style="max-width: 19%;">
+            <a asp-controller="Admin" asp-action="ManageCareerGuides" class="text-decoration-none text-dark">
+                <div class="card text-center dashboard-card hover-guides">
+                    <div class="card-body">
+                        <i class="bi bi-book-fill text-info"></i>
+                        <h5 class="mt-2 fw-bold">Cẩm nang</h5>
+                        <p class="fs-5 fw-semibold">@Model.TotalCareerGuides</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ✅ Biểu đồ + Báo cáo -->
+    <div class="row g-4 mt-4">
+        <!-- Biểu đồ -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-light fw-bold">
+                    <i class="bi bi-graph-up me-2"></i> Thống kê tổng quan
+                </div>
+                <div class="card-body">
+                    <canvas id="adminChart"
+                            style="height:220px;"
+                            data-values='@System.Text.Json.JsonSerializer.Serialize(new[] {
+                                Model.TotalUsers,
+                                Model.TotalEmployers,
+                                Model.TotalJobs,
+                                Model.TotalReports,
+                                Model.TotalCareerGuides
+                            })'>
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Báo cáo gần đây -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-light fw-bold">
+                    <i class="bi bi-exclamation-triangle me-2"></i> Báo cáo gần đây
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var report in Model.RecentReports)
+                        {
+                            <li class="list-group-item">
+                                <b>#@report.ReportId</b> - @report.Reason
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/admin-dashboard-v2.js"></script>
+}

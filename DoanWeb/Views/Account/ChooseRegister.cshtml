@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Chọn loại đăng ký";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center g-4">
+        <!-- Tiêu đề section -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Bạn muốn đăng ký là</h2>
+        </div>
+        <!-- Ô Ứng viên -->
+        <!-- Ô Ứng viên -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/icon7.png" alt="Ứng viên" />
+                    <h5 class="fw-bold mt-3">Ứng viên</h5>
+                </div>
+                <a class="btn btn-gradient mx-auto mt-3" style="width: 160px;" asp-controller="Account" asp-action="RegisterCandidate" asp-route-role="Candidate">
+                    Đăng ký ngay
+                </a>
+            </div>
+        </div>
+
+        <!-- Ô Nhà tuyển dụng -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/icon6.png" alt="Nhà tuyển dụng" />
+                    <h5 class="fw-bold mt-3">Nhà tuyển dụng</h5>
+                </div>
+                <a class="btn btn-gradient mx-auto mt-3" style="width: 160px;" asp-controller="Account" asp-action="RegisterEmployer" asp-route-role="Employer">
+                    Đăng ký ngay
+                </a>
+            </div>
+        </div>
+
+
+    <!-- Dòng đăng ký chung -->
+    <div class="text-center mt-4">
+        <span>Bạn đã có tài khoản? </span>
+        <a asp-controller="Account" asp-action="ChooseLogin" class="fw-bold text-decoration-none">Đăng nhập ngay</a>
+    </div>
+</div>

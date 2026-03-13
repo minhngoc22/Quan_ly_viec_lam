@@ -1,0 +1,126 @@
+﻿@model DoanWeb.Models.RegisterEmployerViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Đăng ký Nhà tuyển dụng";
+}
+
+<link rel="stylesheet" href="~/css/resgiter.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <script>
+        setTimeout(function() {
+            window.location.href = '@Url.Action("LoginEmployer", "Account")';
+        }, 2000);
+    </script>
+}
+
+
+<div class="register-container">
+    <div class="register-card">
+        <!-- Header -->
+        <div class="register-header text-center">
+            <h1>Đăng ký Nhà tuyển dụng</h1>
+            <p>Tạo tài khoản để đăng tin tuyển dụng và quản lý công ty</p>
+        </div>
+
+        <form asp-action="RegisterEmployer" method="post" class="register-form">
+            @Html.AntiForgeryToken()
+
+            <!-- Công ty -->
+            <div class="form-section">
+                <h3>
+                    <span class="material-icons" style="color: blue;vertical-align: middle; margin-right: 0.5rem;">business</span>
+                    Thông tin công ty
+                </h3>
+                <div class="grid-2">
+                    <div>
+                        <label>Tên công ty *</label>
+                        <input asp-for="CompanyName" placeholder="Công ty TNHH ABC" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.CompanyName)</span>
+                    </div>
+                    <div>
+                        <label>Lĩnh vực *</label>
+                        <select asp-for="CategoryID" asp-items="Model.JobCategories">
+                            <option value="">Chọn lĩnh vực</option>
+                        </select>
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.CategoryID)</span>
+                    </div>
+                    <div>
+                        <label>Email công ty</label>
+                        <input asp-for="CompanyEmail" placeholder="email@company.com" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.CompanyEmail)</span>
+                    </div>
+                    <div>
+                        <label>Tỉnh/Thành phố *</label>
+                        <select asp-for="ProvinceId" asp-items="Model.Provinces">
+                            <option value="">Chọn tỉnh/thành phố</option>
+                        </select>
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.ProvinceId)</span>
+                    </div>
+                    <div>
+                        <label>Địa chỉ *</label>
+                        <input asp-for="Address" placeholder="Số nhà, đường, quận/huyện" />
+                    </div>
+                    <div>
+                        <label>Website</label>
+                        <input asp-for="Website" placeholder="https://example.com" />
+                    </div>
+                    <div class="full-width">
+                        <label>Mô tả công ty</label>
+                        <textarea asp-for="Description" rows="3" placeholder="Giới thiệu ngắn gọn về công ty..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Người đại diện -->
+            <div class="form-section">
+                <h3>
+                    <span class="material-icons" style="color: #4CAF50;vertical-align: middle; margin-right: 0.5rem;">person</span>
+                    Thông tin người đại diện
+                </h3>
+                <div class="grid-2">
+                    <div>
+                        <label>Họ và tên *</label>
+                        <input asp-for="FullName" placeholder="Nguyễn Văn A" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.FullName)</span>
+                    </div>
+                    <div>
+                        <label>Chức vụ *</label>
+                        <input asp-for="Position" placeholder="Giám đốc nhân sự" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.Position)</span>
+                    </div>
+                    <div>
+                        <label>Email *</label>
+                        <input asp-for="Email" placeholder="email@company.com" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.Email)</span>
+                    </div>
+                    <div>
+                        <label>Số điện thoại *</label>
+                        <input asp-for="Phone" placeholder="0123456789" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.Phone)</span>
+                    </div>
+                    <div>
+                        <label>Mật khẩu *</label>
+                        <input asp-for="Password" type="password" placeholder="********" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.Password)</span>
+                    </div>
+                    <div>
+                        <label>Nhập lại mật khẩu *</label>
+                        <input asp-for="ConfirmPassword" type="password" placeholder="********" />
+                        <span class="text-error">@Html.ValidationMessageFor(m => m.ConfirmPassword)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-submit">Đăng ký</button>
+            <div class="text-center mt-3">
+                <a asp-action="ChooseRegister" asp-controller="Account">← Quay lại chọn loại đăng ký</a>
+            </div>
+        </form>
+    </div>
+</div>

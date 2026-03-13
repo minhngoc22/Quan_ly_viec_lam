@@ -1,0 +1,83 @@
+﻿@model DoanWeb.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập Quản trị viên";
+}
+<!-- Hiển thị lỗi tổng quát -->
+<span class="text-danger">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</span>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <!-- Cột form đăng nhập -->
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-4">
+                    <!-- Hiển thị lỗi chung -->
+                    <div class="text-danger mb-3">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                    <h3 class="text-center mb-4 text-danger">Đăng nhập Quản trị viên</h3>
+
+                    <form asp-action="LoginAdmin" asp-controller="Account" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Nhập email quản trị viên" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="form-label">Mật khẩu</label>
+                            <div class="input-group">
+                                <input asp-for="Password" id="Password" type="password"
+                                       class="form-control" placeholder="Nhập mật khẩu" />
+                                <span class="input-group-text bg-white border-start-0">
+                                    <img src="~/image/icon2.png" alt="Password icon"
+                                         style="width:20px; height:20px;" />
+                                </span>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-danger w-100">Đăng nhập</button>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="ChooseLogin" asp-controller="Account">← Quay lại chọn loại đăng nhập</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột ảnh quảng cáo -->
+        <div class="col-md-5 d-flex align-items-center">
+            <img src="~/image/logo.jpg" alt="Admin Login Banner" class="img-fluid rounded shadow-lg">
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        console.log("✅ login.js loaded");
+        const input = document.getElementById('Password');
+        const toggle = document.getElementById('togglePassword');
+
+        const iconHidden = '/image/icon2.png';
+        const iconVisible = '/image/icon1.png';
+
+        if (toggle && input) {
+            toggle.addEventListener('click', function () {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggle.src = iconVisible;
+                } else {
+                    input.type = 'password';
+                    toggle.src = iconHidden;
+                }
+            });
+        } else {
+            console.log('Không tìm thấy phần tử Password hoặc togglePassword');
+        }
+    </script>
+}

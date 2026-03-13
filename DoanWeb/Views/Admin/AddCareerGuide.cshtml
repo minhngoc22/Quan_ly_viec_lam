@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Thêm cẩm nang";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="bi bi-book"></i> Thêm cẩm nang</h3>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+
+            <form asp-action="AddCareerGuide" method="post" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="title" class="form-label fw-semibold">Tiêu đề <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" id="title" name="title" placeholder="Nhập tiêu đề..." required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="author" class="form-label fw-semibold">Tác giả</label>
+                        <input type="text" class="form-control form-control-lg" id="author" name="author" placeholder="Tên tác giả">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="category" class="form-label fw-semibold">Danh mục</label>
+                        <input type="text" class="form-control" id="category" name="category" placeholder="VD: Writing CV, Interview Tips">
+                    </div>
+
+                    <div class="col-12">A
+                        <label for="description" class="form-label fw-semibold">Mô tả ngắn</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Tóm tắt nội dung cẩm nang..."></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="content" class="form-label fw-semibold">Nội dung <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="content" name="content" rows="10" placeholder="Nhập nội dung chi tiết..." required></textarea>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="image" class="form-label fw-semibold">Ảnh minh họa</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-start">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-check-circle"></i> Thêm cẩm nang
+                    </button>
+                    <a asp-action="ManageCareerGuides" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lấy thông báo từ TempData
+            var errorMessage = '@TempData["ErrorMessage"]';
+            var successMessage = '@TempData["SuccessMessage"]';
+
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: errorMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+}

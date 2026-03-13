@@ -1,0 +1,146 @@
+﻿@model DoanWeb.Models.CvViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa CV";
+}
+<link rel="stylesheet" href="~/css/editcv.css" />
+
+
+
+<div class="py-5">
+    <div class="cv-wrapper">
+        <h2 class="title">📝 Chỉnh sửa CV</h2>
+
+        <form asp-action="EditCV" enctype="multipart/form-data">
+            <!-- Thông tin cá nhân -->
+            <h4 class="section-title"><i class="bi bi-person-lines-fill me-2"></i>Thông tin cá nhân</h4>
+            <div class="row mb-3">
+                <div class="col-6 mb-2">
+                    <label class="form-label">Họ và tên</label>
+                    <input asp-for="Cv.FullName" class="form-control" placeholder="Nguyễn Văn A" />
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label">Email</label>
+                    <input asp-for="Cv.Email" class="form-control" placeholder="example@gmail.com" />
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label">Số điện thoại</label>
+                    <input asp-for="Cv.Phone" class="form-control" placeholder="090xxxxxxx" />
+                </div>
+                <div class="col-6 mb-2">
+                    <label class="form-label">Địa chỉ</label>
+                    <input asp-for="Cv.Address" class="form-control" placeholder="TP. Hồ Chí Minh" />
+                </div>
+                <div class="col-4 mb-2">
+                    <label class="form-label">Ngày sinh</label>
+                    <input asp-for="Cv.DateOfBirth" type="date" class="form-control" />
+                </div>
+                <div class="col-4 mb-2">
+                    <label class="form-label">Giới tính</label>
+                    <select asp-for="Cv.Gender" class="form-select">
+                        <option value="">-- Chọn --</option>
+                        <option>Nam</option>
+                        <option>Nữ</option>
+                        <option>Khác</option>
+                    </select>
+                </div>
+                <div class="col-4 mb-2">
+                    <label class="form-label">Ảnh đại diện</label>
+                    <input asp-for="Cv.Avatar" class="form-control" placeholder="/images/avatar.jpg" />
+                </div>
+            </div>
+
+            <!-- Mục tiêu nghề nghiệp -->
+            <h4 class="section-title"><i class="bi bi-bullseye me-2"></i>Mục tiêu nghề nghiệp</h4>
+            <textarea asp-for="Cv.CareerGoal" class="form-control" rows="3" placeholder="Mục tiêu nghề nghiệp của bạn..."></textarea>
+
+            <!-- Kỹ năng -->
+            <h4 class="section-title"><i class="bi bi-lightning-fill me-2"></i>Kỹ năng</h4>
+            <div id="skills-list" class="mb-2">
+                @for (int i = 0; i < Model.Skills.Count; i++)
+                {
+                    <div class="row mb-2">
+                        <div class="col-6"><input asp-for="Skills[i].SkillName" class="form-control" placeholder="Tên kỹ năng" /></div>
+                        <div class="col-4"><input asp-for="Skills[i].SkillLevel" class="form-control" placeholder="Trình độ" /></div>
+                        <div class="col-2 text-end"><button type="button" class="btn btn-outline-danger btn-sm remove-skill">Xóa</button></div>
+                    </div>
+                }
+            </div>
+            <button type="button" id="add-skill" class="btn btn-outline-success btn-sm mb-3">+ Thêm kỹ năng</button>
+
+            <!-- Kinh nghiệm -->
+            <h4 class="section-title"><i class="bi bi-briefcase-fill me-2"></i>Kinh nghiệm</h4>
+            <div id="exp-list" class="mb-2">
+                @for (int i = 0; i < Model.Experiences.Count; i++)
+                {
+                    <div class="border rounded p-2 mb-2">
+                        <input asp-for="Experiences[i].Position" class="form-control mb-1" placeholder="Vị trí" />
+                        <input asp-for="Experiences[i].CompanyName" class="form-control mb-1" placeholder="Công ty" />
+                        <div class="row">
+                            <div class="col-6"><input asp-for="Experiences[i].StartDate" type="date" class="form-control" /></div>
+                            <div class="col-6"><input asp-for="Experiences[i].EndDate" type="date" class="form-control" /></div>
+                        </div>
+                        <textarea asp-for="Experiences[i].Description" class="form-control mt-1" rows="2" placeholder="Mô tả công việc..."></textarea>
+                    </div>
+                }
+            </div>
+            <button type="button" id="add-exp" class="btn btn-outline-success btn-sm mb-3">+ Thêm kinh nghiệm</button>
+
+            <!-- Học vấn -->
+            <h4 class="section-title"><i class="bi bi-mortarboard-fill me-2"></i>Học vấn</h4>
+            <div id="edu-list" class="mb-2">
+                @for (int i = 0; i < Model.Educations.Count; i++)
+                {
+                    <div class="border rounded p-2 mb-2">
+                        <input asp-for="Educations[i].SchoolName" class="form-control mb-1" placeholder="Tên trường" />
+                        <input asp-for="Educations[i].Major" class="form-control mb-1" placeholder="Chuyên ngành" />
+                        <div class="row">
+                            <div class="col-6"><input asp-for="Educations[i].StartYear" class="form-control" placeholder="Năm bắt đầu" /></div>
+                            <div class="col-6"><input asp-for="Educations[i].EndYear" class="form-control" placeholder="Năm kết thúc" /></div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <button type="button" id="add-edu" class="btn btn-outline-success btn-sm mb-3">+ Thêm học vấn</button>
+
+            <!-- Chứng chỉ -->
+            <h4 class="section-title"><i class="bi bi-award-fill me-2"></i>Chứng chỉ</h4>
+            <div id="cert-list" class="mb-2">
+                @for (int i = 0; i < Model.Certificates.Count; i++)
+                {
+                    <div class="border rounded p-2 mb-2">
+                        <input asp-for="Certificates[i].CertificateName" class="form-control mb-1" placeholder="Tên chứng chỉ" />
+                        <input asp-for="Certificates[i].Organization" class="form-control mb-1" placeholder="Tổ chức cấp" />
+                        <input asp-for="Certificates[i].Year" class="form-control mb-1" placeholder="Năm cấp" />
+                    </div>
+                }
+            </div>
+            <button type="button" id="add-cert" class="btn btn-outline-success btn-sm mb-3">+ Thêm chứng chỉ</button>
+
+            <!-- File -->
+            <h4 class="section-title"><i class="bi bi-file-earmark-pdf me-2"></i>Tệp CV (PDF)</h4>
+            <input type="file" name="file" class="form-control mb-3" accept=".pdf" />
+
+            <div class="text-end mt-4 d-flex justify-content-between">
+                <a asp-controller="Candidate" asp-action="Dashboard" class="btn btn-secondary px-4">
+                    ⬅️ Quay lại Dashboard
+                </a>
+                <button type="submit" class="btn btn-primary px-4">
+                    💾 Lưu thay đổi
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('remove-skill')) e.target.closest('.row').remove();
+            if (e.target.classList.contains('remove-exp')) e.target.closest('.border').remove();
+            if (e.target.classList.contains('remove-edu')) e.target.closest('.border').remove();
+            if (e.target.classList.contains('remove-cert')) e.target.closest('.border').remove();
+        });
+    </script>
+}

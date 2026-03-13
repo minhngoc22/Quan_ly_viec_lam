@@ -1,0 +1,271 @@
+﻿@model DoanWeb.Models.JobSearchViewModel
+@{
+    ViewData["Title"] = "Jobify";
+}
+<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/job.css" asp-append-version="true" />
+
+
+<div class="hero-section text-center text-white py-5"
+     style="background: url('/image/1.png') no-repeat center center/cover; min-height: 400px;">
+
+    <div class="container">
+        <h1 class="fw-bold mb-3 display-5">
+            Tìm Việc Làm <span style="color:#FFD700;">Mơ Ước</span> Của Bạn
+        </h1>
+        <p class="mb-4 fs-5">Khám phá hàng nghìn cơ hội việc làm từ các công ty hàng đầu</p>
+
+        <!-- Thanh tìm kiếm -->
+        <form method="get" asp-controller="Job" asp-action="Index"
+              id="jobSearchForm"
+              class="search-bar d-flex align-items-center mx-auto border rounded-pill overflow-hidden"
+              style="max-width: 900px; background:white;">
+            <!-- Input từ khóa -->
+            <div class="position-relative flex-grow-1 border-end">
+                <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input type="text" id="keywordInput" name="keyword" value="@Model.Keyword"
+                       class="form-control border-0 ps-5"
+                       placeholder="Tìm kiếm công việc, vị trí..." />
+
+            </div>
+            <!-- Địa điểm -->
+            <div class="position-relative" style="width: 200px;">
+                <i class="fas fa-map-marker-alt position-absolute top-50 start-0 translate-middle-y ms-3 text-danger"></i>
+                <select id="provinceSelect" asp-for="ProvinceId" asp-items="Model.Provinces"
+                        class="form-select border-0 ps-5">
+                    <option value="">Địa điểm...</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-gradient2">
+                Tìm kiếm 🔍
+            </button>
+
+
+
+        </form>
+    </div>
+</div>
+
+
+<!-- 2. Số liệu -->
+<div class="container py-5">
+    <div class="row g-4 text-center">
+        <div class="col-6 col-md-3">
+            <div class="card stat-card jobs shadow-sm p-3 rounded-4 h-100">
+                <h3 class="fw-bold mb-0">2,500+</h3>
+                <p class="mb-0">Việc làm</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card companies shadow-sm p-3 rounded-4 h-100">
+                <h3 class="fw-bold mb-0">500+</h3>
+                <p class="mb-0">Công ty</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card candidates shadow-sm p-3 rounded-4 h-100">
+                <h3 class="fw-bold mb-0">10,000+</h3>
+                <p class="mb-0">Ứng viên</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card success shadow-sm p-3 rounded-4 h-100">
+                <h3 class="fw-bold mb-0">95%</h3>
+                <p class="mb-0">Tỷ lệ thành công</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 🌟 Ngành nghề nổi bật -->
+@{
+    // Màu và icon đại diện cho từng ngành
+    var colors = new[] { "#007bff", "#28a745", "#dc3545", "#ffc107", "#17a2b8" };
+    var icons = new[] { "fa-laptop-code", "fa-chart-line", "fa-bullhorn", "fa-briefcase", "fa-graduation-cap" };
+    int index = 0;
+}
+
+<div class="container py-4 text-center">
+    <h4 class="fw-bold mb-4">Ngành nghề nổi bật</h4>
+
+    <div class="featured-row">
+        @foreach (var cat in (IEnumerable<dynamic>)ViewBag.TopCategories)
+        {
+            var color = colors[index % colors.Length];
+            var icon = icons[index % icons.Length];
+
+            <a asp-controller="Job"
+               asp-action="Index"
+               asp-route-categoryId="@cat.CategoryId"
+               class="featured-btn"
+               style="--btn-color:@color;">
+                <i class="fas @icon"></i>
+                @cat.CategoryName
+            </a>
+
+            index++;
+        }
+    </div>
+</div>
+
+
+<!-- ============================ -->
+<!-- 🎯 VIỆC LÀM MỚI NHẤT -->
+<!-- ============================ -->
+<div class="container mt-5">
+    <h3 class="mb-4 text-primary fw-bold text-center">
+        💼 Việc làm mới nhất
+    </h3>
+
+    <div id="jobCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @{
+                var jobs = Model.Jobs.Take(6).ToList(); // lấy 6 job
+                int totalSlides = (int)Math.Ceiling(jobs.Count / 3.0); // 3 card/slide
+            }
+
+            @for (int i = 0; i < totalSlides; i++)
+            {
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="row g-4">
+                        @for (int j = i * 3; j < i * 3 + 3 && j < jobs.Count; j++)
+                        {
+                            var job = jobs[j];
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm job-card rounded-4 position-relative overflow-hidden">
+                                    <!-- Loại công việc -->
+                                    @if (!string.IsNullOrEmpty(job.JobType))
+                                    {
+                                        <div class="position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill text-white small fw-semibold"
+                                             style="background-color:#0d6efd; z-index:2;">
+                                            @job.JobType
+                                        </div>
+                                    }
+
+                                    <!-- Nút yêu thích -->
+                                    <button type="button"
+                                            class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 favorite-btn shadow-sm"
+                                            data-job-id="@job.JobId"
+                                            title="Lưu công việc @job.Title"
+                                            style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; z-index:3;">
+                                        @{
+                                            var isFavorite = ViewBag.SavedJobIds != null && ViewBag.SavedJobIds.Contains(job.JobId);
+                                        }
+                                        <i class="@(isFavorite ? "fas" : "far") fa-heart text-danger fs-5"></i>
+                                    </button>
+
+                                    <!-- Nội dung -->
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold text-truncate mb-1 text-center">@job.Title</h5>
+                                        <p class="text-muted mb-3 small text-center">@job.Company?.CompanyName</p>
+
+                                        <div class="row g-3 align-items-start">
+                                            <div class="col-4 d-flex justify-content-center">
+                                                <img src="@(string.IsNullOrEmpty(job.Company?.Logo) ? Url.Content("~/images/default-logo.png") : job.Company.Logo)"
+                                                     alt="@job.Company?.CompanyName"
+                                                     class="rounded-circle border"
+                                                     style="width:80px;height:80px;object-fit:cover;">
+                                            </div>
+                                            <div class="col-8">
+                                                <ul class="list-unstyled text-muted small mb-3">
+                                                 @*    <li><i class="fas fa-briefcase me-2 text-secondary"></i>@(job.Category?.CategoryName ?? "Chưa cập nhật")</li> *@
+                                                    <li><i class="fas fa-venus-mars me-2 text-pink"></i>Giới tính: @(job.GenderRequirement ?? "Không yêu cầu")</li>
+                                                    <li><i class="fas fa-calendar-alt me-2 text-warning"></i>Hạn: @(job.ExpireDate?.ToString("dd/MM/yyyy") ?? "Không có")</li>
+                                                    <li><i class="fas fa-map-marker-alt me-2 text-danger"></i>@((!string.IsNullOrEmpty(job.Location) ? job.Location : "") + (string.IsNullOrEmpty(job.Location) ? "" : " - ") + (job.Province?.ProvinceName ?? "Chưa cập nhật"))</li>
+                                                    <li><i class="fas fa-users me-2 text-info"></i>@(job.Applications?.Count() ?? 0)/@(job.VacancyCount) ứng viên</li>
+                                                    <li><i class="fas fa-money-bill-wave me-2 text-success"></i>@(string.IsNullOrEmpty(job.Salary) ? "Liên hệ" : job.Salary)</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center mt-2">
+                                            <a asp-controller="Job" asp-action="JobDetail" asp-route-id="@job.JobId"
+                                               class="btn btn-gradient1 w-50 fw-semibold rounded-pill border">
+                                                Xem chi tiết
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Overlay hiển thị khi hover -->
+                                    <div class="job-overlay d-flex justify-content-center align-items-center">
+                                        <img src="@Url.Content(job.ImageUrl ?? "~/image/default-job.png")" alt="Ảnh công việc" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Nút điều khiển -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#jobCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#jobCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+        <!-- Indicators -->
+        <div class="carousel-indicators mt-3">
+            @for (int i = 0; i < totalSlides; i++)
+            {
+                <button type="button" data-bs-target="#jobCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i+1)"></button>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 5. Công ty hàng đầu -->
+<section id="top-companies-section" class="companies-section py-5">
+    <div class="container">
+        <h3 class="mb-4 text-success fw-bold text-center">Công ty hàng đầu</h3>
+        <div class="row g-4">
+            @foreach (var company in Model.TopCompanies!)
+            {
+                <div class="col-6 col-md-3">
+                    <div class="card shadow-sm company-card text-center p-3 rounded-4 h-100">
+
+                        <img src="@(string.IsNullOrEmpty(company.Logo) ? Url.Content("~/images/default-logo.png") : company.Logo)"
+                             class="img-fluid mb-2"
+                             style="max-height:60px; object-fit:contain;" />
+                        <h6 class="fw-bold mb-1">@company.CompanyName</h6>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script src="~/js/job-search.js?v=@DateTime.Now.Ticks"></script>
+
+    <script src="~/js/saved-jobs.js"></script>
+
+<script>
+    document.querySelectorAll('.job-card').forEach(card => {
+        const overlay = card.querySelector('.job-overlay');
+
+        card.addEventListener('mouseenter', () => {
+            overlay.style.transition = 'all 0.4s ease';
+            overlay.style.right = '0';
+            overlay.style.opacity = '1';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            overlay.style.right = '-100%';
+            overlay.style.opacity = '0';
+        });
+    });
+</script>
+
+
+}
+
+

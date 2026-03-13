@@ -1,0 +1,50 @@
+﻿@model DoanWeb.Models.CandidateDashboardViewModel
+
+@{
+    ViewData["Title"] = "Bảng điều khiển Ứng viên";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">Xin chào, @Model.FullName 👋</h2>
+        <p class="text-muted fs-5">Chào mừng bạn đến với trang quản lý dành cho Ứng viên</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Hồ sơ CV -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/candidate/2.png" alt="Hồ sơ CV" style="height:80px;" />
+                    <h5 class="fw-bold mt-3">Hồ sơ CV</h5>
+                    <p class="text-muted">Quản lý và chỉnh sửa CV trực tuyến của bạn.</p>
+                </div>
+                <a asp-controller="Candidate" asp-action="CV" class="btn btn-primary mt-3">Quản lý CV</a>
+            </div>
+        </div>
+
+        <!-- Ứng tuyển -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/candidate/5.png" alt="Ứng tuyển" style="height:80px;" />
+                    <h5 class="fw-bold mt-3">Ứng tuyển</h5>
+                    <p class="text-muted">Xem lại các công việc bạn đã ứng tuyển.</p>
+                </div>
+                <a asp-controller="Candidate" asp-action="AppliedJobs" class="btn btn-primary mt-3">Xem ứng tuyển</a>
+            </div>
+        </div>
+
+        <!-- Việc làm đã lưu -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/candidate/1.png" alt="Việc làm đã lưu" style="height:80px;" />
+                    <h5 class="fw-bold mt-3">Việc làm đã lưu</h5>
+                    <p class="text-muted">Danh sách các công việc bạn đã lưu để xem sau.</p>
+                </div>
+                <a asp-controller="Candidate" asp-action="SavedJobs" class="btn btn-primary mt-3">Xem việc làm</a>
+            </div>
+        </div>
+    </div>
+</div>

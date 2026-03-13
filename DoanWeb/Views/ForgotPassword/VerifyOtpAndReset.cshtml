@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Xác thực OTP & Đổi mật khẩu";
+    var email = ViewBag.Email as string;
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <h3 class="text-center mb-4">Xác thực OTP & Đặt mật khẩu mới</h3>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <form asp-action="VerifyOtpAndReset" method="post">
+        <input type="hidden" name="email" value="@email" />
+
+        <div class="mb-3">
+            <label class="form-label">OTP</label>
+            <input type="text" name="otp" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mật khẩu mới</label>
+            <input type="password" name="newPassword" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Xác nhận mật khẩu</label>
+            <input type="password" name="confirmPassword" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Xác nhận</button>
+    </form>
+</div>

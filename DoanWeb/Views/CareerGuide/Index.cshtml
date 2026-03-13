@@ -1,0 +1,23 @@
+﻿@model IEnumerable<DoanWeb.Models.CareerGuide>
+
+<link rel="stylesheet" href="~/css/cam-nang.css" asp-append-version="true" />
+<div style="text-align: center;">
+    <h2 class="section-title">Cẩm nang việc làm</h2>
+</div>
+
+
+<div class="masonry-flex">
+    @foreach (var item in Model)
+    {
+        <div class="masonry-item card card-hover">
+            <img src="@item.Image" class="card-img-top" alt="@item.Title">
+            <div class="card-body">
+                <h5 class="card-title">@item.Title</h5>
+                <p class="card-text text-muted">@item.Description</p>
+                <a asp-action="Details" asp-route-id="@item.GuideId" class="btn btn-primary">
+                    Xem thêm
+                </a>
+            </div>
+        </div>
+    }
+</div>

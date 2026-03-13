@@ -1,0 +1,87 @@
+﻿@model DoanWeb.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập Nhà tuyển dụng";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <!-- Cột form đăng nhập -->
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-4">
+                    <!-- Hiển thị lỗi chung -->
+                    <div class="text-danger mb-3">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                    <h3 class="text-center mb-4 text-primary">Đăng nhập Nhà tuyển dụng</h3>
+
+                    <form asp-action="LoginEmployer" asp-controller="Account" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Nhập email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3 position-relative">
+                            <label asp-for="Password" class="form-label">Mật khẩu</label>
+                            <input asp-for="Password" id="Password" type="password" class="form-control" placeholder="Nhập mật khẩu" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+
+                            <img id="togglePassword" src="~/image/icon2.png"
+                                 style="position:absolute; top:38px; right:10px; width:24px; height:24px; cursor:pointer;" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                        <!-- Thêm link quên mật khẩu -->
+                        <div class="text-center mt-2">
+                            <a asp-action="ForgotPassword" asp-controller="ForgotPassword" class="text-decoration-none text-primary">
+                                Quên mật khẩu?
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="ChooseLogin" asp-controller="Account">← Quay lại chọn loại đăng nhập</a>
+                        </div>
+
+                        <!-- Thêm dòng chưa có tài khoản -->
+                        <div class="text-center mt-2">
+                            <span>Chưa có tài khoản? </span>
+                            <a asp-action="RegisterEmployer" asp-controller="Account" class="text-decoration-none fw-bold text-primary">Đăng ký</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột ảnh quảng cáo -->
+        <div class="col-md-5 d-flex align-items-center">
+            <img src="~/image/banner7.png" alt="Quảng cáo" class="img-fluid rounded shadow-lg">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        console.log("✅ login.js loaded");
+        const input = document.getElementById('Password');
+        const toggle = document.getElementById('togglePassword');
+
+        const iconHidden = '/image/icon2.png';
+        const iconVisible = '/image/icon1.png';
+
+        if (toggle && input) {
+            toggle.addEventListener('click', function () {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggle.src = iconVisible;
+                } else {
+                    input.type = 'password';
+                    toggle.src = iconHidden;
+                }
+            });
+        } else {
+            console.log('Không tìm thấy phần tử Password hoặc togglePassword');
+        }
+    </script>
+}

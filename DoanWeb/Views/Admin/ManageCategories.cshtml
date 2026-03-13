@@ -1,0 +1,201 @@
+﻿@model IEnumerable<DoanWeb.Models.JobCategory>
+@{
+    ViewData["Title"] = "Quản lý danh mục việc làm";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="fas fa-layer-group me-2"></i> Quản lý danh mục việc làm
+            </h4>
+            <button id="btnAddCategory" class="btn btn-light text-primary fw-semibold">
+                <i class="fas fa-plus-circle me-1"></i> Thêm danh mục
+            </button>
+        </div>
+
+        <div class="card-body bg-light">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i> Chưa có danh mục nào.
+                </div>
+            }
+            else
+            {
+                <table class="table table-hover align-middle bg-white shadow-sm rounded">
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width: 80px;">#</th>
+                            <th>Tên danh mục</th>
+                            <th style="width: 180px;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                        }
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+                                <td class="text-center fw-semibold">@index</td>
+                                <td>@category.CategoryName</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-primary btnEditCategory me-1"
+                                            data-id="@category.CategoryId"
+                                            data-name="@category.CategoryName">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </button>
+
+                                    <button class="btn btn-sm btn-outline-danger btnDeleteCategory"
+                                            data-id="@category.CategoryId"
+                                            data-name="@category.CategoryName">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </button>
+                                </td>
+
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<!-- ✅ Nút quay lại Dashboard -->
+<a asp-action="Dashboard" asp-controller="Admin" class="btn btn-secondary mb-3">
+    ← Quay lại Dashboard
+</a>
+@section Scripts {
+    <script>
+        // 🟢 Thêm danh mục bằng SweetAlert2 popup
+        document.getElementById("btnAddCategory").addEventListener("click", async () => {
+            const { value: categoryName } = await Swal.fire({
+                title: "Thêm danh mục mới",
+                input: "text",
+                inputPlaceholder: "Nhập tên danh mục...",
+                confirmButtonText: "Lưu",
+                showCancelButton: true,
+                cancelButtonText: "Hủy",
+                confirmButtonColor: "#0d6efd",
+                inputValidator: (value) => {
+                    if (!value) return "Vui lòng nhập tên danh mục!";
+                }
+            });
+
+            if (categoryName) {
+                const response = await fetch('@Url.Action("AddCategory", "Admin")', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `name=${encodeURIComponent(categoryName)}`
+                });
+
+                if (response.ok) {
+                    await Swal.fire({
+                        icon: "success",
+                        title: "Thành công!",
+                        text: "Danh mục đã được thêm.",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    location.reload();
+                } else {
+                    Swal.fire("Lỗi", "Không thể thêm danh mục. Vui lòng thử lại.", "error");
+                }
+            }
+        });
+
+        // 🔴 Xóa danh mục (SweetAlert2 xác nhận)
+        document.querySelectorAll(".btnDeleteCategory").forEach(btn => {
+            btn.addEventListener("click", async (e) => {
+                const id = btn.getAttribute("data-id");
+                const name = btn.getAttribute("data-name");
+
+                const result = await Swal.fire({
+                    title: "Xác nhận xóa",
+                    html: `Bạn có chắc chắn muốn xóa danh mục <b>${name}</b> không?`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Xóa",
+                    cancelButtonText: "Hủy",
+                    confirmButtonColor: "#dc3545"
+                });
+
+                if (result.isConfirmed) {
+                    const response = await fetch('@Url.Action("DeleteCategory", "Admin")', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `id=${id}`
+                    });
+
+                    if (response.ok) {
+                        await Swal.fire({
+                            icon: "success",
+                            title: "Đã xóa!",
+                            text: "Danh mục đã bị xóa.",
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        location.reload();
+                    } else {
+                        Swal.fire("Lỗi", "Không thể xóa danh mục.", "error");
+                    }
+                }
+            });
+        });
+
+                // 🟢 Sửa danh mục (SweetAlert2 popup)
+        document.querySelectorAll(".btnEditCategory").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const id = btn.getAttribute("data-id");
+                const oldName = btn.getAttribute("data-name");
+
+                const { value: newName } = await Swal.fire({
+                    title: "Chỉnh sửa danh mục",
+                    input: "text",
+                    inputValue: oldName,
+                    inputPlaceholder: "Nhập tên mới...",
+                    confirmButtonText: "Lưu thay đổi",
+                    showCancelButton: true,
+                    cancelButtonText: "Hủy",
+                    confirmButtonColor: "#0d6efd",
+                    inputValidator: (value) => {
+                        if (!value) return "Vui lòng nhập tên danh mục!";
+                    }
+                });
+
+                if (newName && newName !== oldName) {
+                    const response = await fetch('@Url.Action("EditCategory", "Admin")', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `id=${id}&name=${encodeURIComponent(newName)}`
+                    });
+
+                    if (response.ok) {
+                        await Swal.fire({
+                            icon: "success",
+                            title: "Cập nhật thành công!",
+                            text: "Danh mục đã được sửa.",
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        location.reload();
+                    } else {
+                        Swal.fire("Lỗi", "Không thể cập nhật danh mục. Vui lòng thử lại.", "error");
+                    }
+                }
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿.job-form-a4 .card {
+    max-width: 21cm; /* A4 width */
+    margin: 0 auto;
+}
+
+.job-form-a4 .form-control-sm,
+.job-form-a4 .form-select-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.job-form-a4 label {
+    margin-bottom: 0.2rem;
+}
+
+@media print {
+    body {
+        margin: 1cm;
+    }
+
+    .job-form-a4 .card {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    .job-form-a4 .btn {
+        display: none;
+    }
+}

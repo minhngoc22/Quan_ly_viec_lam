@@ -1,0 +1,117 @@
+﻿/* 💡 Cải thiện hiệu ứng card */
+.job-card {
+    position: relative;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    border: 2px solid #e3e6f0;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+    .job-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+/* 💖 Nút gradient */
+.btn-gradient1 {
+    background: linear-gradient(180deg, #28a745, #81c784);
+    color: #fff;
+    border: none;
+}
+
+    .btn-gradient1:hover {
+        background: linear-gradient(180deg, #2ecc71, #81c784);
+        color: #fff;
+    }
+
+.text-pink {
+    color: #e83e8c;
+}
+
+
+.job-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 60px); /* trừ khoảng cho nút xem chi tiết */
+    background-color: #fff;
+    z-index: 2;
+    /* Ẩn hoàn toàn khi không hover */
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .job-overlay img {
+        max-width: 100%; /* to ảnh hơn */
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+        transform: scale(0); /* ẩn ảnh ban đầu */
+    }
+
+.job-card:hover .job-overlay {
+    opacity: 1;
+    transform: translateX(0); /* hiện overlay */
+}
+
+    .job-card:hover .job-overlay img {
+        transform: scale(1); /* hiện ảnh */
+    }
+
+/* Nút luôn nổi trên overlay */
+.job-card .card-body .btn {
+    position: relative;
+    z-index: 3;
+}
+
+/* Nút điều khiển carousel */
+/* Indicator */
+#jobCarousel .carousel-indicators {
+    position: absolute;
+    bottom: -25px; /* nằm dưới carousel */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+    /* Chấm indicator */
+    #jobCarousel .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    #jobCarousel .carousel-indicators .active {
+        background-color: #28a745;
+    }
+
+/* Mũi tên điều khiển ra ngoài */
+#jobCarousel .carousel-control-prev,
+#jobCarousel .carousel-control-next {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#jobCarousel .carousel-control-prev {
+    left: -25px; /* ra ngoài trái */
+}
+
+#jobCarousel .carousel-control-next {
+    right: -25px; /* ra ngoài phải */
+}

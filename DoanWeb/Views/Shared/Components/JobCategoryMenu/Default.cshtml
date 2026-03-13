@@ -1,0 +1,23 @@
+﻿@model Tuple<List<DoanWeb.Models.JobCategory>, List<DoanWeb.Models.JobCategory>>
+
+<div class="row g-1">
+    <div class="d-flex">
+        <div class="flex-fill me-2">
+            @foreach (var cat in Model.Item1)
+            {
+                <a class="dropdown-item" asp-controller="Job" asp-action="Index" asp-route-categoryId="@cat.CategoryId">
+                    @cat.CategoryName
+                </a>
+            }
+        </div>
+        <div class="flex-fill">
+            @foreach (var cat in Model.Item2)
+            {
+                <a class="dropdown-item" asp-controller="Job" asp-action="Index" asp-route-categoryId="@cat.CategoryId">
+                    @cat.CategoryName
+                </a>
+            }
+        </div>
+    </div>
+
+</div>

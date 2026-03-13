@@ -1,0 +1,91 @@
+﻿@model IEnumerable<DoanWeb.Models.Job>
+
+@{
+    ViewData["Title"] = "Quản lý tin tuyển dụng";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Quản lý tin tuyển dụng</h2>
+
+    <a href="@Url.Action("CreateJob", "Employer")" class="btn btn-success mb-3">+ Đăng tin mới</a>
+
+    @* 🔔 Thông báo thành công/thất bại *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Hiện tại bạn chưa có tin tuyển dụng nào.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>Địa điểm</th>
+                    <th>Mức lương</th>
+                    <th>Ngày đăng</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var job in Model)
+                {
+                    <tr>
+                        <td>@job.Title</td>
+                        <td>@job.Location</td>
+                        <td>
+                            @{
+                                if (!string.IsNullOrEmpty(job.Salary))
+                                {
+                                    if (decimal.TryParse(job.Salary, out decimal salaryValue))
+                                    {
+                                        @($"{salaryValue:N0} VNĐ")
+                                    }
+                                    else
+                                    {
+                                        @job.Salary
+                                        // giữ nguyên text như "Thương lượng"
+                                    }
+                                }
+                                else
+                                {
+                                    @("Chưa cập nhật")
+                                }
+                            }
+                        </td>
+
+
+                        <td>@job.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                        <td class="text-center">
+                            <a href="@Url.Action("EditJob", "Employer", new { id = job.JobId })" class="btn btn-sm btn-warning">Sửa</a>
+                            <a href="@Url.Action("DeleteJob", "Employer", new { id = job.JobId })"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Bạn có chắc muốn xóa tin này không?');">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<div class="text-center mt-4">
+    <a asp-action="Dashboard" class="btn btn-secondary px-4 rounded-pill">
+        ⬅️ Quay lại Dashboard
+    </a>
+</div>

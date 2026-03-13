@@ -1,0 +1,458 @@
+﻿/* ==========================
+   Navbar chính
+========================== */
+.navbar-custom {
+    background: #28a745;
+    position: fixed; /* cố định trên cùng */
+    top: 0;
+    width: 100%; /* chiếm full chiều ngang */
+    left: 0;
+    right: 0;
+    z-index: 1030; /* ưu tiên hiển thị */
+}
+
+    .navbar-custom .nav-link,
+    .navbar-custom .navbar-brand {
+        color: #fff !important; /* đổi màu chữ navbar */
+    }
+
+        .navbar-custom .nav-link:hover {
+            color: #ffdf6c !important; /* vàng nhạt khi hover */
+        }
+
+/* ==========================
+   Thanh bar phụ (Index page)
+========================== */
+.sub-bar {
+    width: 95%; /* rộng gần bằng navbar */
+    max-width: 900px; /* giới hạn tối đa */
+    background: #28a745;
+    border-radius: 20px;
+    padding: 10px 0;
+    margin: 0 auto; /* căn giữa */
+}
+
+    .sub-bar .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+    }
+
+        .sub-bar .nav-link:hover {
+            color: #ffdf6c !important;
+        }
+
+/* ==========================
+   Search bar (Index page)
+========================== */
+.search-bar {
+    background: #fff;
+    border-radius: 12px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+    .search-bar .form-control,
+    .search-bar input,
+    .search-bar select {
+        height: 45px;
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+        .search-bar .form-control:focus,
+        .search-bar .form-select:focus {
+            border-color: #09b7ce;
+            box-shadow: 0 0 0 0.2rem rgba(9, 183, 206, 0.25);
+        }
+
+    .search-bar i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+    }
+
+    .search-bar button {
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+
+/* ==========================
+   Body & Banner
+========================== */
+html, body {
+    height: 100%; /* để sticky footer hoạt động */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+ 
+    padding-top: 80px; /* bằng chiều cao navbar */
+    display: flex;
+    flex-direction: column; /* bố cục theo cột */
+    min-height: 100vh; /* đảm bảo toàn bộ chiều cao */
+}
+
+main {
+    flex: 1; /* chiếm phần còn lại, đẩy footer xuống đáy */
+    min-height: 400px; /* đảm bảo khi không có nội dung, main vẫn cao */
+}
+
+.banner-wrapper {
+    text-align: center; /* căn giữa ảnh */
+    margin-top: 1rem;
+}
+
+.banner-img {
+    max-width: 1300px; /* giới hạn chiều rộng tối đa */
+    width: 100%; /* co giãn trên màn nhỏ */
+    height: auto; /* giữ tỉ lệ gốc */
+    margin: 0 auto; /* căn giữa */
+    border-radius: 8px; /* bo góc nhẹ */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ==========================
+   Icon tròn nổi bật
+========================== */
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* ==========================
+   Dashboard Card
+========================== */
+.dashboard-card {
+    border-radius: 12px; /* bo tròn card */
+    overflow: hidden; /* ẩn phần thừa */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .dashboard-card img {
+        height: 120px; /* giữ ảnh đồng bộ */
+        width: auto;
+        display: block;
+        margin: 20px auto 10px;
+        object-fit: contain; /* không méo ảnh */
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover img {
+        transform: scale(1.05); /* zoom nhẹ khi hover */
+    }
+
+/* ==========================
+   Footer
+========================== */
+.footer-custom {
+    background: #28a745; /* xanh ngọc → xanh biển */
+    color: #fff;
+    margin-top: auto; /* đẩy footer xuống đáy khi nội dung ít */
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: 100%;
+}
+
+    .footer-custom a {
+        color: #f8f9fa;
+        transition: color 0.3s;
+    }
+
+        .footer-custom a:hover {
+            color: #ffe082; /* vàng nhạt khi hover */
+        }
+
+/* ==========================
+   Dropdown & menu
+========================== */
+.c {
+    color: green; /* chữ xanh */
+    font-weight: bold; /* chữ đậm */
+}
+
+.dropdown-menu .dropdown-item {
+    white-space: nowrap; /* không xuống dòng */
+    text-overflow: ellipsis; /* hiển thị dấu ... nếu quá dài */
+    max-width: 100%; /* vừa với cột */
+}
+
+/* ==========================
+   Sub-bar search input
+========================== */
+.sub-bar input.form-control,
+.sub-bar select.form-select {
+    height: 45px;
+    font-size: 14px;
+}
+
+/* ==========================
+   Responsive
+========================== */
+@media (max-width: 768px) {
+    .sub-bar {
+        width: 95%;
+    }
+
+        .sub-bar input,
+        .sub-bar select {
+            margin-bottom: 10px;
+        }
+}
+
+/* ==========================
+   Nút gradient loang màu
+========================== */
+.btn-gradient {
+    background: linear-gradient(90deg, #09b7ce, #782fe7);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 10px 0;
+    border-radius: 8px;
+    transition: background 0.5s, transform 0.3s, box-shadow 0.3s;
+
+}
+
+    .btn-gradient:hover {
+        background: linear-gradient(90deg, #782fe7, #09b7ce);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #0062E6, #33AEFF);
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(135deg,#0062E6,#33AEFF);
+    color: #fff;
+}
+
+.btn-gradient-success {
+    background: linear-gradient(135deg,#28a745,#5cd65c);
+    color: #fff;
+}
+
+.btn-gradient-danger {
+    background: linear-gradient(45deg, #dc3545, #ff6f61);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+    .btn-gradient-primary:hover,
+    .btn-gradient-success:hover,
+    .btn-gradient-danger:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        color: white;
+    }
+
+/* Base cho tất cả card số liệu */
+.stat-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: #fff;
+    }
+
+        .stat-card:hover h3,
+        .stat-card:hover p {
+            color: #fff !important;
+        }
+
+    /* Màu riêng từng loại */
+    .stat-card.jobs:hover {
+        background: linear-gradient(135deg, #00c6ff, #0072ff); /* xanh dương */
+    }
+
+    .stat-card.companies:hover {
+        background: linear-gradient(135deg, #56ab2f, #a8e063); /* xanh lá */
+    }
+
+    .stat-card.candidates:hover {
+        background: linear-gradient(135deg, #f7971e, #ffd200); /* vàng cam */
+    }
+
+    .stat-card.success:hover {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b); /* đỏ hồng */
+    }
+/* Job Card mặc định */
+.job-card {
+    position: relative; /* để icon absolute nằm trên */
+    background-color: #ffffff;
+    border: 1px solid #0f3ffa;
+    border-radius: 1rem;
+    box-shadow: 0 2px px rgba(0, 0, 0, 0.1);
+    padding-top: 3rem; /* đẩy nội dung xuống tránh icon trái tim */
+    transition: all 0.3s ease;
+}
+
+    .job-card:hover {
+        background-color: #f8fbff;
+        border-color: #91c2f8;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-3px);
+    }
+.company-card {
+    background-color: #fff;
+    border: 1px solid #0f3ffa !important; /* viền đỏ luôn hiển thị */
+    border-radius: 1rem !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+    .company-card:hover {
+        border-color: #b71c1c !important; /* đỏ đậm khi hover */
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+    }
+
+
+
+. /* Nút Tìm kiếm loang trắng và #28a745 */
+/* ==========================
+   Nút Tìm kiếm (trắng ↔ xanh lá)
+========================== */
+.btn-gradient2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* khoảng cách giữa icon và text */
+    padding: 0.5rem 1.5rem;
+    height: 45px;
+    line-height: 1;
+    border-radius: 30px;
+    border: 2px solid #28a745;
+    background-color: #ffffff; /* nền trắng */
+    color: #28a745; /* chữ xanh lá */
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+}
+
+/* Hover — nền xanh lá, chữ trắng, nổi nhẹ */
+.btn-gradient2:hover {
+    background-color: #28a745;
+    color: #ffffff;
+    border-color: #28a745;
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.35);
+    transform: translateY(-2px);
+}
+
+
+
+.search-bar button.btn-gradient2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* khoảng cách giữa icon và text */
+    padding: 0.5rem 1.5rem;
+    height: 45px;
+    line-height: 1;
+    border-radius: 30px;
+    border: 5px solid #28a745;
+    background-color: #ffffff; /* nền trắng */
+    color: #28a745; /* chữ xanh lá */
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+}
+
+    .search-bar button.btn-gradient2:hover {
+        background-color: #28a745;
+        color: #ffffff;
+        border-color: #28a745;
+        box-shadow: 0 6px 15px rgba(40, 167, 69, 0.35);
+        transform: translateY(-2px);
+    }
+
+/* Nút Đăng Nhập & Đăng Ký */
+.navbar .btn-login,
+.navbar .btn-register {
+    color: #fff !important;
+    background-color: transparent !important;
+    border: 2px solid transparent !important;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-decoration: none !important;
+}
+
+    /* Hover Đăng Nhập */
+    .navbar .btn-login:hover {
+        color: #ff9800 !important; /* chữ cam */
+        background-color: #fff !important; /* nền trắng */
+        border-color: #ff9800 !important; /* viền cam */
+    }
+
+    /* Hover Đăng Ký */
+    .navbar .btn-register:hover {
+        color: #ff9800 !important; /* chữ trắng */
+        background-color: #fff !important; /* nền cam */
+        border-color: #ff9800 !important;
+    }
+
+/* Icon ban đầu màu trắng (dùng filter làm trắng) */
+/* Trạng thái ban đầu: icon trắng */
+.btn-login img,
+.btn-register img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1); /* làm trắng icon */
+    transition: filter 0.3s ease;
+}
+
+/* Khi hover: icon chuyển sang xanh lá #28a745 */
+/* Khi hover: icon cam (#f39c12) */
+.btn-login:hover img,
+.btn-register:hover img {
+    filter: brightness(0) saturate(100%) invert(58%) sepia(84%) saturate(1605%) hue-rotate(2deg) brightness(101%) contrast(101%);
+}
+
+/* ==========================
+   Navbar - Phóng to chữ
+========================== */
+.navbar-custom .navbar-brand {
+    font-size: 1.4rem; /* Tăng kích thước tên thương hiệu */
+    font-weight: 700; /* Chữ đậm hơn */
+    letter-spacing: 0.5px;
+}
+
+.navbar-custom .nav-link {
+    font-size: 1.1rem; /* Tăng kích thước chữ menu */
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 8px 14px; /* tạo khoảng cách đều, dễ click */
+}

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DoanWeb.Models.Notification>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-bell" style="font-size: 20px;"></i>
+        <span id="notificationCount" class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
+            @Model.Count(n => !n.IsRead)
+        </span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end"
+        aria-labelledby="notificationDropdown"
+        style="width: 400px; max-height: 300px; overflow-y: auto; white-space: normal;"
+        id="notificationList">
+        @if (!Model.Any())
+        {
+            <li><span class="dropdown-item-text text-muted">Chưa có thông báo</span></li>
+        }
+        else
+        {
+            @foreach (var n in Model)
+            {
+                <li>
+                    <a class="dropdown-item" href="/Notification/Index">
+                        @n.Message <br />
+                        <small class="text-muted">@n.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                    </a>
+
+                </li>
+            }
+        }
+    </ul>
+
+</li>

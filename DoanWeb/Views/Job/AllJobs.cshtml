@@ -1,0 +1,178 @@
+﻿@model DoanWeb.Models.AllJobsViewModel
+@{
+    ViewData["Title"] = "Jobify";
+}
+<!-- CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
+
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Tiêu đề chính -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-4 fw-bold">Tìm việc làm phù hợp với bạn</h1>
+                <p class="text-muted">Duyệt các cơ hội việc làm mới nhất từ nhiều công ty</p>
+            </div>
+        <!-- Sidebar bộ lọc -->
+        <div class="col-md-3">
+                <form id="filterForm" method="get" class="p-3 bg-light border rounded">
+
+                <h5 class="fw-bold mb-3">Bộ lọc</h5>
+
+                <!-- Từ khóa -->
+                <div class="mb-3">
+                    <label class="form-label small">Từ khóa</label>
+                        <input type="text" id="keywordInput" name="keyword" value="@Model.Keyword"
+                               class="form-control border-0 ps-5"
+                               placeholder="Tìm kiếm công việc, vị trí..." />
+                </div>
+
+                <!-- Địa điểm -->
+                <!-- Địa điểm -->
+             <!-- Địa điểm -->
+                <!-- Địa điểm -->
+                  <!-- Địa điểm -->
+                <div class="mb-3">
+                    <label class="form-label small">Địa điểm</label>
+
+                    <!-- Thanh hiển thị địa điểm đã chọn (dạng tag) -->
+                    <div id="selectedProvincesBox"
+                         class="form-control mb-2 d-flex flex-wrap gap-2"
+                         style="min-height:45px; align-items:center;">
+                        <span class="text-muted">Chưa chọn địa điểm nào</span>
+                    </div>
+
+                    <!-- Dropdown chọn nhiều địa điểm -->
+                        <!-- Dropdown chọn nhiều địa điểm -->
+                        <select id="provinceSelect"
+                                name="SelectedProvinceIds"
+                                multiple="multiple"
+                                class="form-select">
+                            @foreach (var p in Model.Provinces)
+                            {
+                                if (Model.SelectedProvinceIds.Contains(p.ProvinceId))
+                                {
+                                    <option value="@p.ProvinceId" selected>@p.ProvinceName</option>
+                                }
+                                else
+                                {
+                                    <option value="@p.ProvinceId">@p.ProvinceName</option>
+                                }
+                            }
+                        </select>
+
+                </div>
+
+                    <!-- Danh mục công việc -->
+                    <div class="mb-3">
+                        <label class="form-label small">Danh mục công việc</label>
+                        <select id="categorySelect" name="SelectedCategoryIds" multiple="multiple" class="form-select">
+                            @foreach (var c in Model.Categories)
+                            {
+                                if (Model.SelectedCategoryIds.Contains(c.CategoryId))
+                                {
+                                    <option value="@c.CategoryId" selected>@c.CategoryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@c.CategoryId">@c.CategoryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+
+
+                    <div class="mb-3">
+                        <label class="form-label small">Mức lương</label>
+                        <select asp-for="SelectedSalaryRangeId"
+                                asp-items="@(new SelectList(Model.SalaryRanges, "Id", "Label", Model.SelectedSalaryRangeId))"
+                                class="form-select" onchange="this.form.submit();">
+                            <option value="">Chọn khoảng lương</option>
+                        </select>
+                    </div>
+
+                
+
+
+
+                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+            </form>
+        </div>
+
+        <!-- Danh sách việc làm -->
+        <div class="col-md-9">
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-warning">
+                    @ViewBag.Message
+                </div>
+            }
+            <div class="row g-4">
+                @foreach (var job in Model.Jobs)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm border-0 job-card rounded-4 position-relative overflow-hidden">
+                            @if (!string.IsNullOrEmpty(job.JobType))
+                            {
+                                <div class="position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill text-white text-truncate"
+                                     style="background-color:#0d6efd; max-width:70%; font-size:0.75rem; z-index:2;">
+                                    @job.JobType
+                                </div>
+                            }
+                            <button type="button" class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 favorite-btn shadow-sm"
+                                    style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; z-index:3;">
+                                <i class="far fa-heart text-danger"></i>
+                            </button>
+
+                            <div class="card-body pt-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="@(string.IsNullOrEmpty(job.Company?.Logo) ? Url.Content("~/images/default-logo.png") : job.Company.Logo)"
+                                         alt="@job.Company?.CompanyName"
+                                         class="rounded me-3"
+                                         style="width:60px;height:60px;object-fit:cover;">
+                                    <div>
+                                        <h5 class="fw-bold mb-1">@job.Title</h5>
+                                        <p class="text-muted mb-0">@job.Company?.CompanyName</p>
+                                    </div>
+                                </div>
+                                    <p class="text-muted small mb-2">
+                                        <i class="fas fa-briefcase me-1 text-secondary"></i> @(job.Category?.CategoryName ?? "Chưa cập nhật") <br>
+                                        <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+                                        @((!string.IsNullOrEmpty(job.Location) ? job.Location : "") +
+                                            (string.IsNullOrEmpty(job.Location) ? "" : " - ") +
+                                            (job.Province?.ProvinceName ?? "Chưa cập nhật")) <br>
+                                        <i class="fas fa-money-bill-wave me-1 text-success"></i>
+                                        @(string.IsNullOrEmpty(job.Salary) ? "Liên hệ" : job.Salary)
+                                    </p>
+
+                                <p class="text-warning small mb-2">Hạn nộp: @job.ExpireDate?.ToString("dd/MM/yyyy")</p>
+                                <a asp-controller="Job" asp-action="JobDetail" asp-route-id="@job.JobId"
+                                   class="btn btn-outline-primary w-100 fw-semibold rounded-pill">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+    @section Scripts {
+        <script src="~/js/all-jobs.js"></script>
+    }
+
+  
+

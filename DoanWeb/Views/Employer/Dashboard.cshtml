@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Bảng điều khiển Nhà tuyển dụng";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">Xin chào, @ViewBag.UserName 👋</h2>
+        <p class="text-muted fs-5">Chào mừng bạn đến với trang quản lý dành cho Nhà tuyển dụng</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Quản lý tin tuyển dụng -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/icon3.png" alt="Quản lý tin tuyển dụng" />
+                    <h5 class="fw-bold mt-3">Tin tuyển dụng</h5>
+                    <p class="text-muted">Quản lý, thêm mới hoặc chỉnh sửa các tin tuyển dụng.</p>
+                </div>
+                <a href="@Url.Action("ManageJobs", "Employer")" class="btn btn-primary px-4 mt-3">Quản lý</a>
+            </div>
+        </div>
+
+        <!-- Quản lý ứng viên -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/icon5.png" alt="Quản lý ứng viên" />
+                    <h5 class="fw-bold mt-3">Ứng viên</h5>
+                    <p class="text-muted">Xem và quản lý danh sách ứng viên đã ứng tuyển.</p>
+                </div>
+                <a href="@Url.Action("ManageCandidates", "Employer")" class="btn btn-success px-4 mt-3">Xem danh sách</a>
+            </div>
+        </div>
+
+        <!-- Thông tin công ty -->
+        <div class="col-md-4 d-flex">
+            <div class="card dashboard-card text-center p-4 w-100 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <img src="~/image/icon4.png" alt="Thông tin công ty" />
+                    <h5 class="fw-bold mt-3">Thông tin công ty</h5>
+                    <p class="text-muted">Cập nhật hồ sơ và thông tin về công ty của bạn.</p>
+                </div>
+                <a href="@Url.Action("Profile", "Employer")" class="btn btn-info px-4 mt-3">Cập nhật</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿.section-title {
+    text-align: center; /* căn giữa chữ */
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a73e8; /* màu xanh nổi bật */
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block; /* để gạch ngang ::after căn giữa */
+}
+
+    /* Gạch ngang dưới chữ */
+    .section-title::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 4px;
+        background-color: #1a73e8;
+        margin: 8px auto 0; /* cách chữ 8px, căn giữa */
+        border-radius: 2px;
+    }
+
+    /* Hiệu ứng hover nhẹ */
+    .section-title:hover {
+        color: #155ab6;
+    }
+/* Container masonry */
+.masonry-flex {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start; /* card cao thấp tự nhiên */
+    gap: 1.5rem;
+    justify-content: center; /* căn giữa cả grid nếu còn khoảng trống */
+}
+
+/* Card */
+.masonry-item {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex: 1 1 250px; /* tối thiểu 250px, tự co theo màn hình */
+    max-width: 300px; /* không quá to */
+}
+
+/* Hover card */
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+/* Ảnh */
+.card-img-top {
+    width: 100%;
+    height: auto; /* giữ tỉ lệ gốc */
+    display: block;
+}
+
+/* Card body */
+.card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column; /* sắp xếp dọc */
+}
+
+/* Tiêu đề và text */
+.card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+.card-text {
+    font-size: 0.95rem;
+    flex-grow: 1; /* đẩy nút xuống dưới nếu nội dung dài */
+}
+
+/* Button căn giữa */
+.card-body .btn {
+    align-self: center;
+    margin-top: 0.5rem;
+}

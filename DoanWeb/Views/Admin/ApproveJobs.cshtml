@@ -1,0 +1,57 @@
+﻿@model List<DoanWeb.Models.Job>
+@{
+    ViewData["Title"] = "Duyệt việc làm";
+}
+
+<h2>Duyệt việc làm</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tiêu đề</th>
+                <th>Công ty</th>
+                <th>Người đăng</th>
+                <th>Ngày tạo</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr>
+                    <td>@job.JobId</td>
+                    <td>@job.Title</td>
+                    <td>@job.Company?.CompanyName</td>
+                    <td>@job.Employer?.EmployerNavigation?.FullName</td>
+                    <td>@job.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <form asp-action="ApproveJob" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@job.JobId" />
+                            <button class="btn btn-success btn-sm">Duyệt</button>
+                        </form>
+
+                        <form asp-action="RejectJob" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@job.JobId" />
+                            <input type="text" name="reason" placeholder="Lý do từ chối" class="form-control form-control-sm d-inline-block" style="width:150px" />
+                            <button class="btn btn-danger btn-sm">Từ chối</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        Chưa có việc làm cần duyệt.
+    </div>
+}
+
+<!-- ✅ Nút quay lại Dashboard -->
+<a asp-action="Dashboard" asp-controller="Admin" class="btn btn-secondary mb-3">
+    ← Quay lại Dashboard
+</a>

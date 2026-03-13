@@ -1,0 +1,193 @@
+﻿body {
+    background: #f5f8fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cv-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+}
+
+/* Cột trái */
+.cv-left {
+    background: linear-gradient(180deg, #28a745, #81c784);
+    color: #fff;
+    width: 35%;
+    padding: 30px 25px;
+}
+
+    .cv-left h3 {
+        font-weight: 700;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+    }
+
+    .cv-left hr {
+        border-color: rgba(255,255,255,0.4);
+        margin: 1rem 0;
+    }
+
+.cv-info p {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.cv-section-title {
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(255,255,255,0.4);
+    padding-bottom: 4px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Cột phải */
+.cv-right {
+    width: 65%;
+    padding: 40px 40px 30px 40px;
+}
+
+    .cv-right h2 {
+        color: #28a745;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .cv-right .section {
+        margin-bottom: 30px;
+    }
+
+    .cv-right h5 {
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 10px;
+    }
+
+.btn-action {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-edit {
+    background: #ff9800;
+    color: #fff;
+}
+
+    .btn-edit:hover {
+        background: #e68900;
+    }
+
+.btn-delete {
+    background: #dc3545;
+    color: #fff;
+}
+
+    .btn-delete:hover {
+        background: #c82333;
+    }
+
+.cv-file {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+/* ===== Nút Lưu thay đổi ===== */
+.btn-save {
+    background: #28a745;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 24px;
+    transition: 0.3s ease;
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+}
+
+    .btn-save:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(33, 136, 56, 0.4);
+    }
+
+/* ===== Nền trang cho form A4 ===== */
+.page-bg {
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 0;
+}
+
+/* ===== Khung A4 cho form ===== */
+.cv-wrapper {
+    width: 794px; /* chuẩn A4 ngang */
+    min-height: 1123px;
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Nút hành động ===== */
+.btn-save {
+    background: #28a745;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 24px;
+    transition: 0.3s ease;
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+}
+
+    .btn-save:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(33, 136, 56, 0.4);
+    }
+
+.btn-back {
+    background: #6c757d;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 24px;
+    transition: 0.3s ease;
+    box-shadow: 0 3px 10px rgba(108, 117, 125, 0.3);
+    text-decoration: none;
+}
+
+    .btn-back:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(90, 98, 104, 0.4);
+    }
+
+/* ===== Tiêu đề & section ===== */
+.title {
+    text-align: center;
+    color: #28a745;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    color: #28a745;
+    font-weight: 600;
+    border-left: 5px solid #28a745;
+    padding-left: 10px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}

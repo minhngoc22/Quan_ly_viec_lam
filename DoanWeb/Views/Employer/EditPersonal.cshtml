@@ -1,0 +1,112 @@
+﻿@model DoanWeb.Models.EmployerPersonalViewModel 
+@{
+    ViewData["Title"] = "Cập nhật cá nhân";
+}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg rounded-4 w-75">
+        <div class="card-body p-5">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    <i class="fas fa-check-circle"></i> @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                    <i class="fas fa-times-circle"></i> @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <h2 class="text-center mb-4 text-primary fw-bold">
+                👤 Cập nhật thông tin cá nhân
+            </h2>
+
+            <form asp-action="EditPersonal" method="post">
+                <!-- Hidden field EmployerId -->
+                <input type="hidden" asp-for="EmployerId" />
+
+                <!-- Validation summary -->
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <!-- Cột trái: Thông tin cá nhân -->
+                    <div class="col-md-6 pe-4 border-end">
+                        <h5 class="mb-3 text-secondary border-bottom pb-2">📄 Thông tin cá nhân</h5>
+
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-bold">
+                                <i class="fas fa-user"></i> Họ và tên
+                            </label>
+                            <input asp-for="FullName" class="form-control rounded-pill" />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-bold">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input asp-for="Email" type="email" class="form-control rounded-pill" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Phone" class="form-label fw-bold">
+                                <i class="fas fa-phone"></i> Số điện thoại
+                            </label>
+                            <input asp-for="Phone" class="form-control rounded-pill" />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Position" class="form-label fw-bold">
+                                <i class="fas fa-briefcase"></i> Vị trí
+                            </label>
+                            <input asp-for="Position" class="form-control rounded-pill" />
+                            <span asp-validation-for="Position" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Cột phải: Đổi mật khẩu -->
+                    <div class="col-md-6 ps-4">
+                        <h5 class="mb-3 text-danger border-bottom pb-2">🔑 Đổi mật khẩu</h5>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label fw-bold">Mật khẩu cũ</label>
+                            <input asp-for="Password" type="password" class="form-control rounded-pill" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewPassword" class="form-label fw-bold">Mật khẩu mới</label>
+                            <input asp-for="NewPassword" type="password" class="form-control rounded-pill" />
+                            <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút submit -->
+                <!-- Nút submit -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="Profile" class="btn btn-outline-secondary px-4 rounded-pill">⬅️ Quay lại</a>
+                    <button type="submit" class="btn btn-primary px-4 rounded-pill">
+                        💾 Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<!-- Validation scripts -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

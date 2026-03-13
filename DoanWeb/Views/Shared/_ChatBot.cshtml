@@ -1,0 +1,167 @@
+﻿<!-- Chat Icon -->
+<div id="chat-icon" class="chat-icon" onclick="toggleChat()">
+    💬
+</div>
+
+<!-- Chat Box -->
+<div id="chat-box" class="chat-box" style="display:none;">
+    <div class="chat-header">
+        <span>Jobify Bot 🤖</span>
+        <button type="button" onclick="toggleChat()" style="background:none;border:none;color:white;">✖</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+        <div class="msg bot">Xin chào 👋! Tôi là Jobify Bot, bạn cần hỗ trợ gì?</div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." />
+        <button type="button" id="send-btn">Gửi</button>
+    </div>
+</div>
+
+<style>
+    .chat-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #007bff;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+    }
+
+    .chat-box {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 320px;
+        height: 450px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        z-index: 9999;
+    }
+
+    .chat-header {
+        background: #007bff;
+        color: white;
+        padding: 10px;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chat-body {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background: #f9f9f9;
+    }
+
+    .chat-footer {
+        display: flex;
+        padding: 8px;
+        border-top: 1px solid #ddd;
+    }
+
+        .chat-footer input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 6px 10px;
+            margin-right: 6px;
+        }
+
+        .chat-footer button {
+            background: #007bff;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    .msg {
+        margin: 6px 0;
+        padding: 8px 12px;
+        border-radius: 15px;
+        max-width: 80%;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+
+        .msg.user {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .msg.bot {
+            background: #e5e5ea;
+            color: black;
+            margin-right: auto;
+        }
+</style>
+
+<script>
+    const chatInput = document.getElementById("chat-input");
+    const sendBtn = document.getElementById("send-btn");
+    const chatBody = document.getElementById("chat-body");
+
+    function toggleChat() {
+        const box = document.getElementById("chat-box");
+        box.style.display = (box.style.display === "none" || box.style.display === "") ? "flex" : "none";
+    }
+
+    async function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+
+        // Hiển thị tin nhắn user
+        chatBody.innerHTML += `<div class="msg user">${msg}</div>`;
+        chatBody.scrollTop = chatBody.scrollHeight;
+        chatInput.value = "";
+
+        try {
+            const res = await fetch("/chatbot/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: msg })
+            });
+
+            if (!res.ok) {
+                chatBody.innerHTML += `<div class="msg bot">Lỗi server: ${res.status}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+                return;
+            }
+
+            const data = await res.json();
+            chatBody.innerHTML += `<div class="msg bot">${data.reply}</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        } catch (err) {
+            chatBody.innerHTML += `<div class="msg bot">Lỗi gửi tin nhắn: ${err}</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    }
+
+    // Click button
+    sendBtn.addEventListener("click", sendMessage);
+
+    // Nhấn Enter
+    chatInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+</script>

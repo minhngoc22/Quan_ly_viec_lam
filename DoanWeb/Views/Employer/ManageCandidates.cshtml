@@ -1,0 +1,67 @@
+﻿@model IEnumerable<DoanWeb.Models.Application>
+@{
+    ViewData["Title"] = "Quản lý ứng viên";
+}
+
+<h2>Danh sách ứng viên đã ứng tuyển</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ứng viên</th>
+            <th>Email</th>
+            <th>Công việc</th>
+            <th>Ngày ứng tuyển</th>
+            <th>Trạng thái</th>
+            <th>CV</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var app in Model)
+        {
+            <tr>
+                <td>@app.Candidate.CandidateNavigation.FullName</td>
+                <td>@app.Candidate.CandidateNavigation.Email</td>
+                <td>@app.Job.Title</td>
+                <td>@app.AppliedAt?.ToString("dd/MM/yyyy")</td>
+                <td>@app.Status</td>
+                <td>
+                    @if (app.Candidate.Cvs.Any())
+                    {
+                        <a href="@app.Candidate.Cvs.First().FilePath" target="_blank">Xem CV</a>
+                    }
+                    else
+                    {
+                        <span>Chưa có CV</span>
+                    }
+                </td>
+                <td>
+                    <form asp-action="UpdateCandidateStatus" method="post" id="form-@app.ApplicationId">
+                        <input type="hidden" name="applicationId" value="@app.ApplicationId" />
+                        <input type="hidden" name="rejectReason" id="reasonInput-@app.ApplicationId" />
+
+                        <!-- Chọn trạng thái -->
+                        <select name="status" class="form-control mb-2"
+                                onchange="handleStatusChange(this, '@app.ApplicationId')"
+                        @(app.Status == "Từ chối" ? "disabled" : "")>
+                            <option value="Chờ duyệt" selected="@(app.Status=="Chờ duyệt")">Chờ duyệt</option>
+                            <option value="Chấp nhận" selected="@(app.Status=="Chấp nhận")">Chấp nhận</option>
+                            <option value="Từ chối" selected="@(app.Status=="Từ chối")">Từ chối</option>
+                        </select>
+                    </form>
+                </td>
+
+
+                
+
+              
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="text-center mt-4">
+    <a asp-action="Dashboard" class="btn btn-secondary px-4 rounded-pill">
+        ⬅️ Quay lại Dashboard
+    </a>
+</div>

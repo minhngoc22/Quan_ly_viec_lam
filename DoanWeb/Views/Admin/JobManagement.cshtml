@@ -1,0 +1,173 @@
+﻿@model DoanWeb.Models.JobManagementViewModel
+<link rel="stylesheet" href="~/css/admin_jobs.css" asp-append-version="true" />
+@{
+    ViewData["Title"] = "Quản lý việc làm";
+}
+
+<link rel="stylesheet" href="~/css/admin_jobs.css" />
+
+<div class="container mt-4">
+    <h2 class="fw-bold"><i class="bi bi-briefcase"></i> Quản lý việc làm</h2>
+
+   
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mt-3" id="jobTab">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pending">Chờ duyệt (@Model.PendingJobs.Count)</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approved">Đã duyệt (@Model.ApprovedJobs.Count)</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4">
+
+        <!-- TAB CHỜ DUYỆT -->
+        <div class="tab-pane fade show active" id="pending">
+            @if (!Model.PendingJobs.Any())
+            {
+                <p class="text-muted">Không có việc làm chờ duyệt.</p>
+            }
+            else
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Công ty</th>
+                            <th>Người đăng</th>
+                            <th>Ngày tạo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var job in Model.PendingJobs)
+                        {
+                            <tr>
+                                <td>@job.Title</td>
+                                <td>@job.Company?.CompanyName</td>
+                                <td>@job.Employer?.EmployerNavigation?.FullName</td>
+                                <td>@job.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                                <td class="text-end">
+                                    <form asp-action="ApproveJob" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@job.JobId" />
+                                        <button class="btn btn-success btn-sm">Duyệt</button>
+                                    </form>
+
+                                    <form asp-action="RejectJob" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@job.JobId" />
+                                        <button class="btn btn-danger btn-sm">Từ chối</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <!-- TAB ĐÃ DUYỆT -->
+        <div class="tab-pane fade" id="approved">
+            @if (!Model.ApprovedJobs.Any())
+            {
+                <p class="text-muted">Không có việc làm đã duyệt.</p>
+            }
+            else
+            {
+                <table class="table table-bordered" id="approvedJobsTable">
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Công ty</th>
+            <th>Ngày duyệt</th>
+            <th>Ưu tiên</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody id="sortable">
+        @foreach (var job in Model.ApprovedJobs)
+        {
+            <tr data-id="@job.JobId">
+                <td>@job.Title</td>
+                <td>@job.Company?.CompanyName</td>
+                <td>@job.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <select class="form-select form-select-sm prioritySelect" data-id="@job.JobId">
+                                        <option value="0" selected="@(job.Priority==0 ? "selected" : null)">Bình thường</option>
+                                        <option value="1" selected="@(job.Priority==1 ? "selected" : null)">Trung bình</option>
+                                        <option value="2" selected="@(job.Priority==2 ? "selected" : null)">Hot</option>
+
+                </td>
+                <td>
+                    @if (job.Priority > 0)
+                    {
+                        <span class="badge bg-danger">Hot</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Bình thường</span>
+                    }
+
+                    @if (job.IsExpired)
+                    {
+                        <span class="badge bg-dark ms-1">Hết hạn</span>
+                    }
+                </td>
+                <td>
+                    @if (!job.IsExpired)
+                    {
+                        <form asp-action="MarkJobExpired" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@job.JobId" />
+                            <button class="btn btn-warning btn-sm">Hết hạn</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">—</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button id="saveOrder" class="btn btn-primary btn-sm mt-2">Lưu thứ tự & ưu tiên</button>
+
+            }
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>
+        // Drag & drop sắp xếp
+        var el = document.getElementById('sortable');
+        if(el) {
+            var sortable = Sortable.create(el);
+                    document.getElementById('saveOrder').addEventListener('click', function () {
+            var order = [];
+            document.querySelectorAll('#sortable tr').forEach(function (tr) {
+                var jobId = tr.dataset.id;
+                var priority = tr.querySelector('.prioritySelect').value;
+                order.push({ JobId: jobId, Priority: priority });
+            });
+
+            fetch('@Url.Action("UpdateJobOrder")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                body: JSON.stringify(order)
+            }).then(res => {
+                if(res.ok) location.reload();
+            });
+        });
+
+
+
+        }
+    </script>
+}

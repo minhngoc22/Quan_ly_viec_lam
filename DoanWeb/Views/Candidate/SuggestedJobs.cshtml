@@ -1,0 +1,98 @@
+﻿@model List<DoanWeb.Models.SuggestedJobViewModel>
+@using DoanWeb.Models
+@{
+    ViewData["Title"] = "Việc làm gợi ý";
+}
+<link rel="stylesheet" href="~/css/job.css" asp-append-version="true" />
+<div class="container mt-5">
+    <h3 class="mb-4 text-primary fw-bold text-center">
+        💼 Việc làm phù hợp với bạn
+    </h3>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            Chưa có gợi ý việc làm nào, vui lòng cập nhật CV để nhận gợi ý.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var job in Model)
+            {
+                <div class="col-md-6 col-lg-4 job-card-wrapper" id="job-@job.JobId">
+                    <div class="card h-100 shadow-sm job-card rounded-4 position-relative overflow-hidden">
+
+                        <!-- Loại công việc -->
+                        @if (!string.IsNullOrEmpty(job.JobType))
+                        {
+                            <div class="position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill text-white small fw-semibold"
+                                 style="background-color:#0d6efd; z-index:2;">
+                                @job.JobType
+                            </div>
+                        }
+
+                        <!-- Nút yêu thích -->
+                        <button type="button"
+                                class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 favorite-btn shadow-sm"
+                                data-job-id="@job.JobId"
+                                title="Lưu công việc @job.Title"
+                                style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; z-index:3;">
+                            @{
+                                var isFavorite = ViewBag.SavedJobIds != null && ViewBag.SavedJobIds.Contains(job.JobId);
+                            }
+                            <i class="@(isFavorite ? "fas" : "far") fa-heart text-danger fs-5"></i>
+                        </button>
+
+                        <!-- Nội dung -->
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-truncate mb-1 text-center">@job.Title</h5>
+                            <p class="text-muted mb-3 small text-center">@job.CompanyName</p>
+
+                            <div class="row g-3 align-items-start">
+                                <div class="col-4 d-flex justify-content-center">
+                                    <img src="@(string.IsNullOrEmpty(job.CompanyLogo) ? Url.Content("~/images/default-logo.png") : job.CompanyLogo)"
+                                         alt="@job.CompanyName"
+                                         class="rounded-circle border"
+                                         style="width:80px;height:80px;object-fit:cover;">
+                                </div>
+                                <div class="col-8">
+                                    <ul class="list-unstyled text-muted small mb-3">
+                                        <li><i class="fas fa-venus-mars me-2 text-pink"></i>Giới tính: @(job.GenderRequirement ?? "Không yêu cầu")</li>
+                                        <li><i class="fas fa-calendar-alt me-2 text-warning"></i>Hạn: @(job.ExpireDate?.ToString("dd/MM/yyyy") ?? "Không có")</li>
+                                        <li><i class="fas fa-map-marker-alt me-2 text-danger"></i>@((!string.IsNullOrEmpty(job.Location) ? job.Location : "") + (string.IsNullOrEmpty(job.Location) ? "" : " - ") + (job.ProvinceName ?? "Chưa cập nhật"))</li>
+                                        <li>
+                                            <i class="fas fa-users me-2 text-info"></i>
+                                            @job.ApplicationsCount / @job.VacancyCount ứng viên
+                                        </li>
+                                        <li><i class="fas fa-money-bill-wave me-2 text-success"></i>@(string.IsNullOrEmpty(job.Salary) ? "Liên hệ" : job.Salary)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-2">
+                                <a asp-controller="Job" asp-action="JobDetail" asp-route-id="@job.JobId"
+                                   class="btn btn-gradient1 w-50 fw-semibold rounded-pill border">
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Overlay ảnh job khi hover -->
+                        @if (!string.IsNullOrEmpty(job.JobImageUrl))
+                        {
+                            <div class="job-overlay d-flex justify-content-center align-items-center">
+                                <img src="@Url.Content(job.JobImageUrl)" alt="Ảnh công việc" class="img-fluid" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/saved-jobs2.js"></script>
+
+}

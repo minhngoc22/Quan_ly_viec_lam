@@ -1,0 +1,110 @@
+﻿@model DoanWeb.Models.CareerGuide
+@{
+    ViewData["Title"] = "Sửa cẩm nang";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="bi bi-pencil-square"></i> Sửa cẩm nang</h3>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+
+            <form asp-action="EditCareerGuide" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="@Model.GuideId" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="title" class="form-label fw-semibold">Tiêu đề <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" id="title" name="title" value="@Model.Title" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="author" class="form-label fw-semibold">Tác giả</label>
+                        <input type="text" class="form-control form-control-lg" id="author" name="author" value="@Model.Author">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="category" class="form-label fw-semibold">Danh mục</label>
+                        <input type="text" class="form-control" id="category" name="category" value="@Model.Category">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="description" class="form-label fw-semibold">Mô tả ngắn</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">@Model.Description</textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="content" class="form-label fw-semibold">Nội dung <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="content" name="content" rows="10" required>@Model.Content</textarea>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="image" class="form-label fw-semibold">Ảnh minh họa</label>
+                        @if (!string.IsNullOrEmpty(Model.Image))
+                        {
+                            <div class="mb-2">
+                                <img src="@Model.Image" alt="Ảnh cũ" class="img-thumbnail" style="max-height:150px;">
+                            </div>
+                        }
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <small class="text-muted">Chọn ảnh mới để thay thế ảnh hiện tại</small>
+                    </div>
+
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" id="isActive" name="isActive" @(Model.IsActive.GetValueOrDefault() ? "checked" : "")>
+                            <label class="form-check-label" for="isActive">
+                                Hiển thị cẩm nang
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-start">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-check-circle"></i> Cập nhật
+                    </button>
+                    <a asp-action="ManageCareerGuides" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lấy thông báo từ TempData
+            var errorMessage = '@TempData["ErrorMessage"]';
+            var successMessage = '@TempData["SuccessMessage"]';
+
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: errorMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: successMessage,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    </script>
+}

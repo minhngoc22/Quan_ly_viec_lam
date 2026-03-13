@@ -1,0 +1,71 @@
+﻿@model IEnumerable<DoanWeb.Models.Report>
+
+@{
+    ViewData["Title"] = "Quản lý Báo cáo";
+}
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-3 text-danger">
+        <i class="bi bi-flag-fill me-2"></i> Quản lý báo cáo
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Hiện chưa có báo cáo nào.</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Người báo cáo</th>
+                    <th>Lý do</th>
+                    <th>Ngày gửi</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var report in Model)
+                {
+                    <tr>
+                        <td>@report.ReportId</td>
+
+                        <!-- ✅ Người báo cáo (User) -->
+                        <td>@report.ReporterId</td>
+                        <!-- hoặc: @report.Reporter?.FullName nếu có Include -->
+                        <!-- ✅ Lý do -->
+                        <td>@report.Reason</td>
+
+                        <!-- ✅ Ngày gửi -->
+                        <td>
+                            @(report.CreatedAt.HasValue
+                                ? report.CreatedAt.Value.ToString("dd/MM/yyyy")
+                                : "")
+                        </td>
+
+                        <!-- ✅ Trạng thái -->
+                        <td>@report.Status</td>
+
+                        <td class="text-center">
+                            <form asp-action="ResolveReport" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@report.ReportId" />
+                                <button type="submit" class="btn btn-success btn-sm">Xử lý</button>
+                            </form>
+
+                            <form asp-action="DeleteReport" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@report.ReportId" />
+                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<!-- ✅ Nút quay lại Dashboard -->
+<a asp-action="Dashboard" asp-controller="Admin" class="btn btn-secondary mb-3">
+    ← Quay lại Dashboard
+</a>
