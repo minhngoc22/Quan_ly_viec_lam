@@ -1,0 +1,34 @@
+## Ignore Visual Studio / .NET build artifacts
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio cache and user preferences
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+
+## Visual Studio Code
+.vscode/
+
+## User-specific / local configurations
+appsettings.Development.json
+
+## Rider / JetBrains
+.idea/
+*.DotSettings.user
+
+## OS Generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+## Package cache
+*.nupkg
+packages/

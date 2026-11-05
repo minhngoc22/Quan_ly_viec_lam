@@ -1,4 +1,4 @@
-﻿using DoanWeb.Models;
+using DoanWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
@@ -18,6 +18,20 @@ namespace DoanWeb.Controllers
         public AccountController(JobContext context)
         {
             _context = context;
+        }
+
+        // 👉 Trang đăng nhập mặc định (chuyển hướng sang chọn vai trò)
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return RedirectToAction("ChooseLogin");
+        }
+
+        // 👉 Trang đăng ký mặc định (chuyển hướng sang chọn vai trò)
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return RedirectToAction("ChooseRegister");
         }
 
         // 👉 Trang trung gian để chọn loại đăng nhập

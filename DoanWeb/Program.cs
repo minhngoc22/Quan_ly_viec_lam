@@ -1,4 +1,4 @@
-﻿using DoanWeb.Models;
+using DoanWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.Features;
 using DoanWeb; // thêm cái này
@@ -27,6 +27,10 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.MaxRequestBodySize = int.MaxValue; // Không giới hạn
 });
 
+// 🔹 HTTP Client (cho ChatBotController)
+builder.Services.AddHttpClient();
+
+// 🔹 Email Service
 builder.Services.AddScoped<EmailService>();
 
 

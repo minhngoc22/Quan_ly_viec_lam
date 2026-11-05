@@ -1,4 +1,4 @@
-﻿using DoanWeb.Models;
+using DoanWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -109,7 +109,7 @@ namespace DoanWeb.Controllers
             _context.SaveChanges();
 
             TempData["Success"] = "Đổi mật khẩu thành công. Vui lòng đăng nhập.";
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("ChooseLogin", "Account");
         }
 
         // ============================

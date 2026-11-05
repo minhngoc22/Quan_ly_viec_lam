@@ -1,4 +1,4 @@
-﻿using DoanWeb.Models;
+using DoanWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -97,7 +97,7 @@ namespace DoanWeb.Controllers
 
                 _context.AdminActions.Add(new AdminAction
                 {
-                    AdminId = int.Parse(HttpContext.Session.GetString("UserId") ?? "0"),
+                    AdminId = HttpContext.Session.GetInt32("UserId") ?? 0,
                     ActionType = (user.Status ?? false) ? "UnbanUser" : "BanUser",
                     TargetId = user.UserId,
                     Note = $"Thay đổi trạng thái người dùng {user.Email}"
@@ -210,12 +210,12 @@ namespace DoanWeb.Controllers
             await _context.SaveChangesAsync();
 
             // 3️⃣ Ghi log hành động Admin
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (int.TryParse(userIdStr, out int adminId))
+            var adminId = HttpContext.Session.GetInt32("UserId");
+            if (adminId.HasValue)
             {
                 _context.AdminActions.Add(new AdminAction
                 {
-                    AdminId = adminId,
+                    AdminId = adminId.Value,
                     ActionType = "ApproveJob",
                     TargetId = job.JobId,
                     Note = $"Duyệt job: {job.Title ?? "(không có tiêu đề)"}",
@@ -257,9 +257,7 @@ namespace DoanWeb.Controllers
                 await _context.SaveChangesAsync();
 
                 // ✅ Lấy adminId an toàn
-                int adminId = 0;
-                var userIdStr = HttpContext.Session.GetString("UserId");
-                int.TryParse(userIdStr, out adminId);
+                int adminId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
                 // ✅ Ghi log hành động
                 _context.AdminActions.Add(new AdminAction

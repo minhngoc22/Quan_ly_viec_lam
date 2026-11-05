@@ -1,4 +1,4 @@
-﻿using DoanWeb.Models;
+using DoanWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -22,7 +22,7 @@ namespace DoanWeb.Controllers
         {
             var candidateId = HttpContext.Session.GetInt32("UserId");
             if (!candidateId.HasValue)
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("LoginCandidate", "Account");
 
             var user = _context.Users.FirstOrDefault(u => u.UserId == candidateId.Value);
             var candidate = _context.Candidates.FirstOrDefault(c => c.CandidateId == candidateId.Value);
